@@ -1,10 +1,11 @@
 {
   "expo": {
     "name": "Yoldot",
-    "slug": "Yoldot",
-    "version": "1.0.0",
+    "slug": "YoldotV1",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
+    "backgroundColor": "#ffffff",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -16,14 +17,26 @@
     "assetBundlePatterns": [
       "**/*"
     ],
+    "packagerOpts": {
+      "assetExts": [
+        "db"
+      ]
+    },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.elchi89.YoldotV1"
+    },
+    "androidNavigationBar": {
+      "visible": "sticky-immersive",
+      "backgroundColor": "#FFFFFF00"
     },
     "android": {
+      "versionCode":1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.elchi89.YoldotV1"
     },
     "web": {
       "favicon": "./assets/favicon.png"
