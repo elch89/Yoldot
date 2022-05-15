@@ -1,4 +1,4 @@
-import React, { useEffect, useState,useFocusEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     View,
     StyleSheet,
@@ -349,11 +349,9 @@ function Feedback(props){
         <LinearGradient colors={[ myColor.gold,'#fff', myColor.lightBlue, myColor.darkBlue]}
                         locations={[0,0.1,0.7,1]}
                         style={styles.linearGradient}>
-        <View style={{ flex: 16 }}>
+        <View style={{ flex: 1 }}>
         {render()}
         </View>
-        <View style={styles.progress}><CircleArray numOfCircles={4} currCircle = {titles}/></View>
-            
     </LinearGradient>
     <Footer/>
     </SafeAreaView>
@@ -411,30 +409,15 @@ const submitToServer = (data,props, userId) =>{
       }).done();
       return successToken;
 }
-const CircleArray =(props)=>{
-    let circArr = Array();
-    for(let i=0;i<props.numOfCircles;i++){
-      if(i == props.currCircle){
-        circArr.push(<View key={i} style={[styles.circle,{backgroundColor:myColor.gold}]}/>);
-    }
-      else{ 
-        circArr.push(<View key={i} style={styles.circle}/>);
-      }
-    }
-    circArr.reverse();
-    return circArr;
-}
 const styles = StyleSheet.create({
     linearGradient: {
-        // position: 'absolute',
-        // width: Dimensions.get('window').width,
-        // height: Dimensions.get('window').height,
         flex:1
     },
     progress:{
         flex:1,
         flexDirection:'row-reverse',
         alignSelf:'center',
+        
         padding:15,
     },
     circle:{

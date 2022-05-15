@@ -225,7 +225,6 @@ const Category =(props)=>{
   function renderItemCategory({item, index}) {
     const colorTextSelected = item.isSelected ? props.colorTextSelected : myColor.darkBlue;
     const colorItemSelected = item.isSelected ? props.colorItemSelected : 'rgba(255,255,255,0.2)';
-    console.log(item.isSelected)
     return (
       <TouchableOpacity
         style={[styles.itemStyles, props.itemStyles, { backgroundColor: colorItemSelected }]}

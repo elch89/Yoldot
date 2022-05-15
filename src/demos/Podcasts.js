@@ -10,7 +10,6 @@ import {
 import NewPodcasts from '../demos/NewPodcasts'
 import BrowsePodcasts from './BrowsePodcasts'
 import PlayingNow from '../demos/PlayingNow'
-// import { TouchableHighlight } from 'react-native-gesture-handler';
 
 export default class Podcasts extends React.Component{
     constructor (props) {

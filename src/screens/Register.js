@@ -122,12 +122,13 @@ export default class Register extends React.Component{
                 <LinearGradient colors={[ myColor.gold,'#fff', myColor.lightBlue, myColor.darkBlue]}
                             locations={[0,0.1,0.7,1]}
                             style={styles.linearGradient}>
-                    <View style = {[styles.logo,{opacity:this.state.imageOpacity}]}><Image source={require('../../assets/img/yoldot_logoT.png')} /></View>
+                    
                     <ScrollView 
                         ref={(ref)=>this._scrollView = ref} // add reference for scrollView
                         style={[styles.scrollView,]}//{marginTop:height}
                         >
-                        <SafeAreaView style={{paddingTop:height}}>
+                            <Image source={require('../../assets/img/yoldot_logoT.png')} style = {[styles.logo,{opacity:this.state.imageOpacity}]}/>
+                        <SafeAreaView>
                         
                         <View style = {[styles.container,]}>
                             
@@ -240,8 +241,8 @@ const styles = StyleSheet.create({
     logo:{
         backgroundColor: 'transparent',
         alignSelf:'center',
-        position:'absolute',
-        
+        // flex:1,
+        resizeMode: 'contain',
         marginTop:20
     },
     btnContainer:{
@@ -267,7 +268,7 @@ const styles = StyleSheet.create({
           fontWeight:'300',
       },
       container: {
-        marginVertical: 20,
+        // marginVertical: 20,
         paddingHorizontal: 24,
       },
       linearGradient: {

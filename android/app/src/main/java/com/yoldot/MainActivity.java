@@ -1,4 +1,4 @@
-package com.elchi89.YoldotV1;
+package com.yoldot;
 
 import android.os.Build;
 import android.os.Bundle;

@@ -10,16 +10,23 @@
     "preview": {
       "android": {
         "buildType": "apk"
+      },
+      "ios": {
+        "credentialsSource": "remote",
+        "simulator": true
       }
     },
-    "preview2": {
-      "android": {
-        "gradleCommand": ":app:assembleRelease"
-      }
-    },
-    "production": {}
+    "production": {"credentialsSource": "local"}
   },
   "submit": {
-    "production": {}
+    "production": {
+      "android":{
+        "serviceAccountKeyPath":"android/keystores/pc-api-7855166528385459509-328-bf72765b6ce7.json",
+        "track":"internal"
+      },
+      "ios":{
+
+      }
+    }
   }
 }

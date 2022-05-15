@@ -133,13 +133,14 @@ class Login extends Component {
                             locations={[0,0.1,0.7,1]}
                             style={styles.linearGradient}
                             >
-                              <View style={[styles.logo,{opacity:this.state.imageOpacity}]}><Image source={require('../../assets/img/yoldot_logoT.png')} /></View>
+                
             <ScrollView
             // keyboardDismissMode='none' scrollEnabled={false}
               ref={(ref)=>this._scrollView = ref} // add reference for scrollView
                 style={[styles.scrollView,]}
                 >
-                  <SafeAreaView style={{paddingTop:height+20}}>
+                  <Image source={require('../../assets/img/yoldot_logoT.png')} style={[styles.logo,{opacity:this.state.imageOpacity}]}/>
+                  <SafeAreaView >
                     
                     {/* navigate to register screen */}
                   <TouchableOpacity 
@@ -225,8 +226,10 @@ const styles = StyleSheet.create({
     logo:{
       backgroundColor: 'transparent',
       alignSelf:'center',
-      position:'absolute',
+      // position:'absolute',
       marginTop:32,
+      flex:1,
+      resizeMode: 'contain',
       
     },
     btnContainer:{

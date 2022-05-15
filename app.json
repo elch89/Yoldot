@@ -11,6 +11,10 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "androidNavigationBar": {
+      "visible": "sticky-immersive",
+      "backgroundColor": "#FFFFFF"
+    },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
@@ -24,19 +28,15 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.elchi89.YoldotV1"
-    },
-    "androidNavigationBar": {
-      "visible": "sticky-immersive",
-      "backgroundColor": "#FFFFFF00"
+      "bundleIdentifier": "com.yoldot"
     },
     "android": {
-      "versionCode":1,
+      "versionCode":2,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.elchi89.YoldotV1"
+      "package": "com.yoldot"
     },
     "web": {
       "favicon": "./assets/favicon.png"

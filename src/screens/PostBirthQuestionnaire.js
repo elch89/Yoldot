@@ -418,7 +418,9 @@ const styles = StyleSheet.create({
     btnContainer:{
         backgroundColor: myColor.red,
         justifyContent:'center',
-        marginVertical:20,
+        marginVertical:10,
+        borderWidth:2,
+        borderColor:myColor.darkBlue,
         flex:1,
         borderRadius:10,
     },
@@ -451,6 +453,7 @@ const styles = StyleSheet.create({
         padding: 12, 
         fontSize:18,
         color: 'white', 
+        flexWrap: 'wrap',
     },
     contentStyle:{
         margin:30,

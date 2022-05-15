@@ -87,10 +87,11 @@ export default function HomePage(props){
     return(<SafeAreaView style={{flex:1}}
         onLayout={onLayoutRootView}
         >
-        <View style={{flex:0.1}}>
-        <MainHeader logState={userLogout} {...props}/>
-        </View>
         <View style = {styles.body}>
+            <View style = {[styles.touchableContainer, {backgroundColor:"white"}]}>
+            <MainHeader logState={userLogout} {...props}/>
+            </View>
+        
             <View style = {styles.touchableContainer}>
                 <TouchableOpacity 
                     style = {styles.touchables}

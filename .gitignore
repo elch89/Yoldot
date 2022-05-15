@@ -10,6 +10,11 @@ npm-debug.*
 *.orig.*
 web-build/
 
+android/keystores/keystore.jks
+android/keystores/upload_certificate.pem
+credentials.json
+android/keystores/pc-api-7855166528385459509-328-bf72765b6ce7.json
+
 # macOS
 .DS_Store
 

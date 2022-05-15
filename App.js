@@ -1,5 +1,6 @@
 import React,{useEffect, useState} from 'react';
 import * as SplashScreen from "expo-splash-screen";
+import { Platform} from 'react-native';
 import {NavigationContainer , CommonActions, StackActions} from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import {Rating,
@@ -20,9 +21,11 @@ import { useFonts } from "@use-expo/font";
 SplashScreen.preventAutoHideAsync().then(configureBgNav).catch((error) => {    
    console.warn("SplashScreen.preventAutoHideAsync error:", error);
   });
-async function configureBgNav(){// sets nav bar color
+async function configureBgNav(){// configure nav bar color
   try{
     NavigationBar.setVisibilityAsync('hidden');
+    await NavigationBar.setButtonStyleAsync('dark');
+    await NavigationBar.setBackgroundColorAsync('#000000')
   }
   catch(e){console.log(e)}
 }
@@ -35,8 +38,7 @@ const Stack = createStackNavigator();
 function MainNavigator(){
   return(
     <Stack.Navigator
-    initialRouteName="initScreen"
-      screenOptions={{ gestureEnabled: false }}>
+    initialRouteName="initScreen">
         <Stack.Screen
          name='Home'
          component={HomePage}
@@ -100,7 +102,7 @@ const App = () =>{
   if (!isLoaded) {
       return <AppLoading />;
   }
-  return <NavigationContainer><StatusBar hidden/><MainNavigator/></NavigationContainer>;
+  return <NavigationContainer><StatusBar hidden={(Platform.OS==='ios')?false:true}/><MainNavigator/></NavigationContainer>;
       
 };
 // textStyle:{fontFamily:'varelaRound'}// Add to fonts of all 
