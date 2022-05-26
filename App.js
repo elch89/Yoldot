@@ -25,7 +25,6 @@ async function configureBgNav(){// configure nav bar color
   try{
     NavigationBar.setVisibilityAsync('hidden');
     await NavigationBar.setButtonStyleAsync('dark');
-    await NavigationBar.setBackgroundColorAsync('#000000')
   }
   catch(e){console.log(e)}
 }
@@ -105,5 +104,4 @@ const App = () =>{
   return <NavigationContainer><StatusBar hidden={(Platform.OS==='ios')?false:true}/><MainNavigator/></NavigationContainer>;
       
 };
-// textStyle:{fontFamily:'varelaRound'}// Add to fonts of all 
 export default App

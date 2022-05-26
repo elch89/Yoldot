@@ -4,8 +4,13 @@
   },
   "build": {
     "development": {
+      "android": {
       "developmentClient": true,
       "distribution": "internal"
+      },
+      "ios": {
+        "credentialsSource": "remote"
+      }
     },
     "preview": {
       "android": {

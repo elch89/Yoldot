@@ -4,10 +4,12 @@ import {
     Text,
     TextInput,
     StyleSheet,
-    TouchableOpacity
+    TouchableOpacity,
+    Platform
 
 } from 'react-native';
 import{ Picker} from '@react-native-picker/picker'
+import { Select, NativeBaseProvider, CheckIcon, Box, Center } from "native-base";
 import myColor from '../styles/colors'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import SelectableFlatlist, { STATE } from 'react-native-selectable-flatlist';
@@ -87,7 +89,6 @@ function Questionnaire(props) {
         entry= {qid: props.questid,
             selectedItem: selectedItem,
             qtype: props.type,}
-        
     };
     
     const rowItem = (item) => (
@@ -168,36 +169,32 @@ function Questionnaire(props) {
             );
         }
         if(qType === 'dropdown'){// hospital selection
-            return(
-                    <View style = {
-                            [
-                                styles.contentStyle, 
-                                {
-                                    backgroundColor:myColor.lightBlue,
-                                    borderRadius:10,
-                                }
-                            ]
-                        }>
-                    <Picker
-                    mode='dialog'
-                    style = {{height:48}}
-                    itemStyle={{height:48, justifyContent:'center'}}
-                    selectedValue={selected}
-                    onValueChange={(value,key)=>{
-                        if(value!=null){
-                            setSelected(value);
-                            onItemsSelected([{aid:key,val:value}]);
-                        }
-                        }}
-                    >
-                        <Picker.Item 
-                        label={'בחרי בית חולים'}  value={null} />
-                    {props.hospitals.map((item,i) => {
-                    return (<Picker.Item label={item.name} value={item.name} key={i} />)
-                    })}
-                        
-                    </Picker></View>
-            );
+            return(<Center>
+                        <Box w="3/4" maxW="300" >
+                            <Select borderColor={myColor.darkBlue} 
+                                fontWeight="bold"
+                                fontSize={"lg"} 
+                                textAlign="center" 
+                                selectedValue={selected} 
+                                minWidth="200" 
+                                accessibilityLabel="בחרי בית חולים" 
+                                placeholder="בחרי בית חולים" 
+                                _selectedItem={{
+                                    bg: myColor.lightBlue,
+                                    endIcon: <CheckIcon size="6" color={myColor.red}/>}} 
+                                mt={1} 
+                                onValueChange={(value)=>{
+                                    if(value!=null){
+                                        setSelected(value);
+                                        onItemsSelected([{aid:0,val:value}]);// Replaced to aid 0 it is not required, only 1 value selected!
+                                    }
+                                }}>
+                                {props.hospitals.map((item,i) => 
+                                    (<Select.Item label={item.name} value={item.name} key={i}/>)
+                                )} 
+                            </Select>
+                        </Box>
+                    </Center>);
         }
         if(qType === 'open_short'){
             return(
@@ -229,18 +226,17 @@ function Questionnaire(props) {
         }
         if(qType === 'open_long'){
             return(
-                <View style = {styles.contentStyle}>
+                <View style = {[styles.contentStyle,{flex:1}]}>
                 <TextInput style={[styles.txtInp,
                             {textAlignVertical: 'top', 
-                            padding:10,
+                            padding:10, flex:1
                         }]}
                     value={inpTxt}
                     onChangeText={text => onChangeText(text)}
                     onKeyPress = {()=>{onItemsSelected([{aid:0,val:inpTxt}])}}
                     blurOnSubmit={true}
                     multiline={true}
-                    numberOfLines={14}
-                    maxLength={500}
+                    maxLength={1000}
                 /></View>
             );
         }
@@ -262,6 +258,7 @@ function Questionnaire(props) {
             <DateTimePicker 
                 value={currDate}
                 mode = 'date'
+                display="default"
                 maximumDate={new Date()}// Limit selection
                 onChange={setDate} 
                 // onChange={(e)=>{if(e.type == 'set'){this.setDate()}}} 
@@ -334,7 +331,7 @@ function Questionnaire(props) {
         
     // Final render, 
     return(
-    <View style={styles.cardView} >
+        <NativeBaseProvider><View style={styles.cardView} >
         <View style={{flex:6}}>
             <View style={[styles.section]}>
                 <Text style={styles.titles}>{props.question}</Text>
@@ -350,7 +347,7 @@ function Questionnaire(props) {
             paddingHorizontal:20}}>
             {touchable}
         </View> 
-    </View>);
+    </View></NativeBaseProvider>);
     
 }
 
@@ -444,7 +441,7 @@ const styles = StyleSheet.create({
         marginBottom:30,
         borderWidth:1,
         borderColor:'gray',
-        backgroundColor:'#ffffff66',
+        backgroundColor:'#00000006',
         fontSize:18,
         padding:6
     },

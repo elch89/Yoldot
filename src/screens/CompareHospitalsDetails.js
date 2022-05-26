@@ -15,7 +15,7 @@ const Details = (props)=>{
             data={props.dataPass}
     renderItem={({ item }) =>
     <View style = {{flex:1}}>
-        <View style = {{backgroundColor:myColor.darkBlue}}>
+        <View style = {{backgroundColor:myColor.darkBlue, borderRadius:5}}>
             <Text style={
                 {
                     textAlign:'center',

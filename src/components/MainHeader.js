@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
     Alert,
-    Image,
+    ImageBackground
 } from 'react-native';
 import { Icon,IconButton ,HStack, Heading , NativeBaseProvider, Box, Center, Text } from 'native-base';
 import { CommonActions ,StackActions} from '@react-navigation/native';
@@ -9,22 +9,6 @@ import { Entypo } from '@expo/vector-icons';
 import myColors from '../styles/colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
-
-const ImageHeader = () => (
- 
-      <Image
-        style={{
-            resizeMode: 'contain',
-            backgroundColor:'transparent',
-            opacity:0.2,
-            position:'absolute'
-          }}
-        
-        source={require('../../assets/img/yoldot_logo.png')}
-      />
-    // </View>
-);
 const LogOutBtn =(props)=>(
     <IconButton icon={<Icon size="xl" as={Entypo} name="log-out" style={{color:myColors.red,}} />}
         onPress={() => {
@@ -68,19 +52,25 @@ const MainHeader = (props) =>{
     },[]);
     return(
     <NativeBaseProvider>
-        <Center bg="#ffffff" px="1" pt="1" >
-            <ImageHeader {...props}/>
-            <HStack  bg="transparent" direction={"row"}>
+        <ImageBackground
+        source={require('../../assets/img/yoldot_logo.png')}
+        resizeMode="contain"
+        imageStyle={{
+            opacity:0.4,}}
+        style={{
+            flex: 1,
+          }}>
+        <Center bg="transparent" px="1" pt="1" flex={1}>
+              <HStack  bg="transparent" direction={"row"} >
                 <Box flex={1} alignItems="flex-start" justifyContent="flex-end"  >
-                {/* <VStack  > */}
-                    <Heading color={myColors.red} size="lg">שלום, {name}</Heading>
-                {/* </VStack> */}
+                    <Heading color={myColors.red} size="md">שלום, {name}</Heading>
                 </Box>
-                <Center >
+                <Center>
                     <LogOutBtn {...props} />
                 </Center>
             </HStack>
         </Center>
+        </ImageBackground>
     </NativeBaseProvider>
 )};
 export default MainHeader;

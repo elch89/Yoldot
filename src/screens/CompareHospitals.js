@@ -8,14 +8,14 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
+import {NativeBaseProvider, VStack} from 'native-base'
 import Details from './CompareHospitalsDetails'
-import SearchHeader  from '../components/SearchHeader'
+import SearchBox  from '../components/SearchHeader'
 import myColor from '../styles/colors'
 import {connection} from '../data/DataSource'
-// import Category from 'react-native-category';
 import Icon from 'react-native-vector-icons/AntDesign'
 
-const leftArrow = (<Icon name='doubleleft' size={30} color={myColor.gold}/>);
+const leftArrow = (<Icon name='doubleleft' size={30} color={myColor.gold} />);
 export default class Compare extends React.Component{
   constructor () {
     super()
@@ -132,7 +132,7 @@ export default class Compare extends React.Component{
     return [];
     }
     for(let i=0;i<content.length;i++){
-      temp = Object.values(content[i]);
+      temp = Object.values(content[i]); 
       temp.shift();
       temp.shift();
       let ds = {cid:i,subCat:temp[0],describe:[temp[selected[0].id+1], temp[selected[1].id+1]]};
@@ -152,48 +152,27 @@ export default class Compare extends React.Component{
         </View>
       );
     }
-    return (
+    return (<NativeBaseProvider >
       <SafeAreaView style={{flex:1}}>
-        <View style={styles.container}>
-          {!this.state.bothSelected && <View style={{  justifyContent:'center', backgroundColor:'#fff'}}>
-            <Text style={{alignSelf:'center',fontSize:24,color:myColor.red}}>בחרי שני בתי חולים מהרשימה</Text>
-          </View>}
-          <View style={{}}>
-            <SearchHeader hospital={hospitals} callbackFromParent={this.updateChosen}/>
-          </View>
-          {/* <View style={{flex:1}}> */}
-            <View style = {{
-              flexWrap:'nowrap',
-              marginHorizontal:5,
-            }}>
-                    
-              <Category          
+        <VStack  style={styles.container}>
+          <VStack h="1/4" style={[styles.detail,{flex:3}]}>
+          <SearchBox hospitals={hospitals} callbackFromParent={this.updateChosen}/>
+            <Category          
                 data={this.getCategories(categories)}    
                 itemSelected={(item) => this.updateCategory(item.id-1)}
-                // itemText={'title'}  //set attribule of object show in item category
                 colorItemSelected = {myColor.darkBlue}
                 colorTextSelected = '#ffffff'
-                // colorTextDefault = {myColor.darkBlue}
-                style = {{backgroundColor:'transparent', }}
+                style = {{backgroundColor:'transparent'}}
                 itemStyles = {{borderColor:myColor.darkBlue, borderWidth:1,height:48, minWidth:80,fontSize:18}}
               />
-              <View style={{                                  
-                position:'absolute',
-                right: 0,
-                justifyContent:'center',
-                marginVertical:10,
-                elevation:10,
-                opacity:0.5,
-              }}>{leftArrow}</View>
-            </View>
-            <View 
-              style={styles.detail}>
+          </VStack>
+            <VStack 
+              style={[styles.detail,{flex:8}]}>
             {this.renderHospitalInfo()}
-            </View>
-          </View>    
-        {/* </View> */}
+            </VStack>
+          </VStack>    
       </SafeAreaView>
-    );
+      </NativeBaseProvider>);
   }
 
   renderHospitalInfo(){
@@ -256,8 +235,9 @@ const Category =(props)=>{
     typeof onPress === 'function' && onPress(item);
   }
   return (
-    <FlatList
-      style={[styles.categoryStyles, props.style]}
+    <View style={{flex:1, flexDirection:"row",}} >
+    <View style={{flex:0.9}}><FlatList
+      style={[styles.categoryStyles, props.style,]}
       contentContainerStyle={styles.flatListStyles}
       horizontal
       showsHorizontalScrollIndicator={false}
@@ -266,20 +246,22 @@ const Category =(props)=>{
 
       renderItem={renderItemCategory}
       data={data}
-    />
+    /></View>
+    <View style={{flex:0.1,justifyContent:'center',}}>{leftArrow}</View>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#ecf0f1',
+        // backgroundColor: '#ecf0f1',
         padding: 0,
         flexDirection:'column',
         
       },
       detail:{
-        flex: 1 ,
+        // flex: 8 ,
         backgroundColor:'#fff',
         borderColor:'#000',
         borderRadius:20,
@@ -306,6 +288,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         padding: 8,
-        paddingRight: 0
+        paddingRight: 0,
       },
 });

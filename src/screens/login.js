@@ -6,14 +6,11 @@ import {
   View,
   Text,
   Image,
-  Platform,
   TouchableOpacity,
   Alert,
   TextInput,
   Keyboard,
-  ActivityIndicator,
 } from 'react-native';
-import Modal from 'react-native-modal'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CommonActions } from '@react-navigation/native';
 import {LinearGradient} from 'expo-linear-gradient';
@@ -202,7 +199,6 @@ class Login extends Component {
                           </View>
                         </TouchableOpacity>
                       </View>
-                      {/** TODO: implement in server */}
                         <TouchableOpacity 
                         onPress={this.passwordReset.bind(this)}  
                         >
