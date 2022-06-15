@@ -8,13 +8,13 @@ import {
     Platform
 
 } from 'react-native';
-import{ Picker} from '@react-native-picker/picker'
-import { Select, NativeBaseProvider, CheckIcon, Box, Center } from "native-base";
+import { Select, CheckIcon, Box, Center } from "native-base";
 import myColor from '../styles/colors'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import SelectableFlatlist, { STATE } from 'react-native-selectable-flatlist';
 import NumericInput from 'react-native-numeric-input'
 import StarRating from 'react-native-star-rating'
+import CustomList from '../components/CustomFlatList';
 // import CustomList from '../components/CustomFlatList'
 
 
@@ -83,7 +83,7 @@ function Questionnaire(props) {
         onItemsSelected([{aid:0,val:rating}])
     }
     const onChangeText=(text)=>{setInpTxt(text)};
-    const datepicker = () => {setShowDate(true);}
+    const datepicker = () => {setShowDate(!showDate);}
     const onItemsSelected = (selectedItem) => {
         
         entry= {qid: props.questid,
@@ -127,7 +127,6 @@ function Questionnaire(props) {
 
             return(
             <View style = {{flex:1}}>
-                
                 {/* <CustomList data={ynArray(qid)} 
                             qType={qType} 
                             initialSelected={initialSelected}
@@ -207,8 +206,8 @@ function Questionnaire(props) {
         }
         if(qType === 'open_numeric'){
             let numOfBirth = 0;
-            if(props.submitted[qid-1].answer.length>0){
-                numOfBirth = props.submitted[qid-1].answer[0].val;
+            if(props.submitted[qid-2].answer.length>0){
+                numOfBirth = props.submitted[qid-2].answer[0].val;
             }
             return(
                 <View style = {[styles.contentStyle, {alignItems:'center'}]}>
@@ -258,7 +257,7 @@ function Questionnaire(props) {
             <DateTimePicker 
                 value={currDate}
                 mode = 'date'
-                display="default"
+                display="spinner"
                 maximumDate={new Date()}// Limit selection
                 onChange={setDate} 
                 // onChange={(e)=>{if(e.type == 'set'){this.setDate()}}} 
@@ -330,8 +329,7 @@ function Questionnaire(props) {
     }
         
     // Final render, 
-    return(
-        <NativeBaseProvider><View style={styles.cardView} >
+    return(<View style={styles.cardView} >
         <View style={{flex:6}}>
             <View style={[styles.section]}>
                 <Text style={styles.titles}>{props.question}</Text>
@@ -347,7 +345,7 @@ function Questionnaire(props) {
             paddingHorizontal:20}}>
             {touchable}
         </View> 
-    </View></NativeBaseProvider>);
+    </View>);
     
 }
 

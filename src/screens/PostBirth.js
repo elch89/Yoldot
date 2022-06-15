@@ -7,6 +7,7 @@ import {
     Animated, 
     Alert,
 } from 'react-native';
+import {AlertDialog,Button} from 'native-base'
 import myColor from '../styles/colors'
 import Questionnaire  from './PostBirthQuestionnaire';//Survey
 import Footer from '../components/Footer'
@@ -42,7 +43,6 @@ function Feedback(props){
     const position = new Animated.ValueXY();
     const [surveyQuestions, setSurveyQuestions] = useState([]);
     const [current, setCurrent] = useState(0);// 47
-    const [titles, setTitles] = useState(0);
     const [mail, setEmail] = useState("");
     const [hospitals,setHospitals] = useState([])
     const navigation = useNavigation(); 
@@ -75,14 +75,13 @@ function Feedback(props){
         loadAsyncData();
     },[]); 
     // Prevent exit on back press, confirmation with user - hook for background action
-    useEffect( () => 
-    navigation.addListener('beforeRemove', (e) => {
+    useEffect( () =>{
+      const unsubscribe = navigation.addListener('beforeRemove', (e) => {
         if(formComplete)
         {
             return;
         }
         e.preventDefault();
-
         Alert.alert(
           'האם את בטוחה שאת רוצה לצאת?',
           'נתוני הטופס שמילאת לא יישמרו',
@@ -95,7 +94,8 @@ function Feedback(props){
             },
           ]
         );
-      }),
+      });
+      return unsubscribe;},
     [navigation, formComplete]
     );
     const updateEntries = (dataFromChild) => {
@@ -333,7 +333,6 @@ function Feedback(props){
                                         // update state... Failed to submit entry
                                         clearResArr();
                                         setCurrent(0);
-                                        setTitles(0);
                                     }
                                 }
                             }}

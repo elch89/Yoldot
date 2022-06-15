@@ -7,9 +7,10 @@ import {
   TouchableOpacity,
   Linking
 } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Footer from '../components/Footer'
-import MainHeader from '../components/MainHeader'
+import { HStack, VStack, Divider, Badge, Box } from 'native-base';
 import myColor from '../styles/colors'
 import * as FileSystem  from 'expo-file-system';
 import * as SQLite from 'expo-sqlite'
@@ -19,7 +20,7 @@ import * as SplashScreen from 'expo-splash-screen';
 
 const hospIos =[
     {"id": 1, "name": "איכילוב- תל אביב",},
-    {"id": 2,"name": "תל השומר, שיבא- בקעת אונו",},
+    {"id": 2,"name": "תל השומר שיבא- בקעת אונו",},
     {"id": 3,"name": "לניאדו- נתניה",},
     {"id": 4,"name": "מאיר- כפר סבא",},
     {"id": 5,"name": "קפלן- רחובות",},
@@ -104,99 +105,68 @@ export default function HomePage(props){
     if (!appIsReady) {
         return null;
     }
-    
-    async function userLogout(){
-        try {
-            // Remove user token from storage
-            await AsyncStorage.removeItem('id_token');
-        } catch (error) {
-            console.log('AsyncStorage error: ' + error.message);
-        }
-    };
+    const Touchable = ({nav, txtStyle, placeholder, extras=null})=>{
+        
+        return (
+            <LinearGradient
+                colors={[ myColor.gold,'#fff', myColor.lightBlue]}
+                locations={[0,0.2,0.8]}
+                style={styles.touchables}
+                start={[0, 0]} end={[1, 1]}
+      >
+                <TouchableOpacity 
+                    style = {[{flex:1}]}
+                    onPress={() => {
+                        
+                            if(!extras){
+                                if(nav.params){
+                                props.navigation.navigate(nav.route,nav.params)
+                                }
+                            }
+                            else{
+                                extras()
+                            }
+                        }}>
+                    <View style={{justifyContent:'center',alignContent:'center', flex:1}} >
+                        <Text style={txtStyle}>{placeholder}</Text>
+                    </View>
+                </TouchableOpacity>
+            </LinearGradient>
+    )};
+
      
     ///
     return(<SafeAreaView style={{flex:1}}
         onLayout={onLayoutRootView}
         >
         <View style = {styles.body}>
-            <View style = {[styles.touchableContainer, {backgroundColor:"white"}]}>
-            <MainHeader logState={userLogout} {...props}/>
-            </View>
-        
-            <View style = {styles.touchableContainer}>
-                <TouchableOpacity 
-                    style = {styles.touchables}
-                    onPress={() => {
-                        props.navigation.navigate('Feedback',{value:hospitals})}}>
-                    <View style={{justifyContent:'center',alignContent:'center', flex:1}} >
-                        <Text style={styles.toRate}>ספרי לנו על הלידה שלך</Text>
-                    </View>
-                </TouchableOpacity>
-            </View>
-            <View style = {styles.touchableContainer}>
-                <TouchableOpacity 
-                    style = {styles.touchables}
-                    onPress={() => {
-                        props.navigation.navigate('Rating',rating)}}>
-                    <View style={{justifyContent:'center',alignContent:'center', flex:1}}>
-                        <Text style={styles.buttonText}>לתוצאות דרוג בתי יולדות</Text>
-                    </View>
-                </TouchableOpacity>
-            </View>
-            <View style = {styles.touchableContainer}>
-                <TouchableOpacity 
-                    style = {styles.touchables}
-                    onPress={() => {
-                        props.navigation.navigate('Compare',{value:[hospitals,titles]})}}>
-                    <View style={{justifyContent:'center',alignContent:'center', flex:1}}>
-                        <Text style={ styles.buttonText}>להשוואת בתי יולדות</Text>
-                    </View>
-                </TouchableOpacity>
-            </View>
-            <View style = {styles.touchableContainer}>
-                <TouchableOpacity 
-                    style = {styles.touchables}
-                    onPress={() => {
-                        const uri = 'http://www.leidaraka.co.il/%D7%A7%D7%95%D7%A8%D7%A1-%D7%94%D7%9B%D7%A0%D7%94-%D7%9C%D7%9C%D7%99%D7%93%D7%94/';
-                        // opens URL for online course
-                        Linking.openURL(uri);}}>
-                    <View style={{justifyContent:'center',alignContent:'center', flex:1}}>
-                        <Text style={styles.buttonText}>לקורס האונליין שלנו</Text>
-                    </View>
+            <VStack flex={1} >
+                <HStack flex={1} >
+                    <Touchable nav={{route:'Feedback',params:{value:hospitals}}} txtStyle={[styles.buttonText,{fontSize:28}]} placeholder={'ספרי לנו על הלידה שלך'}/>
+                    <Touchable nav={{route:'Rating',params:rating}} txtStyle={styles.buttonText} placeholder={'לתוצאות דרוג בתי יולדות'}/>
+                </HStack>
+                <HStack flex={1} >
+                    <Touchable nav={{route:'Compare',params:{value:[hospitals,titles]}}} txtStyle={styles.buttonText} placeholder={'להשוואת בתי יולדות'}/>
+                    <Touchable extras={()=>{
+                    const uri = 'http://www.leidaraka.co.il/%D7%A7%D7%95%D7%A8%D7%A1-%D7%94%D7%9B%D7%A0%D7%94-%D7%9C%D7%9C%D7%99%D7%93%D7%94/';
+                    // opens URL for online course
+                    Linking.openURL(uri);
+                    }} txtStyle={styles.buttonText} placeholder={'לקורס האונליין שלנו'}/>
+                </HStack>
+                <HStack flex={1} >
+                    <Box flex={1}>
+                        <Badge _text={{fontSize: 18, fontWeight:'bold'}} colorScheme="danger" zIndex={1} variant={"outline"} style={{elevation:5,position: 'absolute',top:10,start:10}}>בקרוב</Badge>
+                        <Touchable nav={{route:'Podcasts',params:null}} txtStyle={styles.buttonText} placeholder={'לפודקאסט'}/>
+                    </Box>
+                    <Box flex={1}>
+                        <Badge _text={{fontSize: 18, fontWeight:'bold'}} colorScheme="danger"  zIndex={1} variant={"outline"} style={{elevation:5,position: 'absolute',top:10,start:10}} >בקרוב</Badge>
+                        <Touchable nav={{route:'Coupons',params:null}} txtStyle={styles.buttonText} placeholder={'לקבלת קופונים'}/>
+                    </Box>
                 
-                </TouchableOpacity>
-                </View>
-                <View style = {styles.touchableContainer}>
-                <TouchableOpacity 
-                style = {styles.touchables}
-                    onPress={() => {
-                       // props.navigation.navigate('Testing')///
-                    // props.navigation.navigate('Podcasts')
-                }}
-                >
-                <View style={{justifyContent:'center',alignContent:'center', flex:1}}>
-                    <Text style={styles.buttonText}>לפודקאסט</Text>
-                </View>
-                <Text style={styles.comingSoon}>בקרוב!</Text>
-                
-                </TouchableOpacity>
-                </View>
-                <View style = {styles.touchableContainer}>
-                <TouchableOpacity 
-                activeOpacity={.5}
-                style = {styles.touchables}
-                // onPress={() => {
-                //     props.navigation.navigate('Coupons')}}
-                    >
-                    <View style={{justifyContent:'center',alignContent:'center', flex:1}}>
-                        <Text style={styles.buttonText}>לקבלת קופונים</Text>
-                    </View>
-                        <Text style={styles.comingSoon}>בקרוב!</Text>
-                    
-                </TouchableOpacity>
-                </View>
-            </View>
-            <Footer/>
+                </HStack>
+            </VStack>
+        </View>
+        <Footer/>
     </SafeAreaView>);
 }
 
@@ -221,9 +191,9 @@ const styles = StyleSheet.create({
         backgroundColor:'#fff',
         paddingTop: 0,
         paddingHorizontal:0,
-        marginHorizontal:-1,
+        margin:1,
         flex:1,
-        elevation:19,
+        // elevation:19,
     },
     buttonText: {
         textAlign: 'center',
@@ -231,42 +201,13 @@ const styles = StyleSheet.create({
         fontWeight:'bold',
         color:myColor.darkBlue,
     },
-    toRate:{
-        textAlign: 'center',
-        fontSize:28,
-        fontWeight:'bold',
-        color:myColor.darkBlue,
-    },
     touchables:{
         flex:1,
-        padding:4,
+        margin:1,
+        padding:10,
         borderColor:myColor.darkBlue,
         borderWidth:1,
-        borderRadius:5,
-        
+        borderRadius:7,
+        elevation:5,
     },
-    
-    touchableContainer:{
-        flex:1,
-        backgroundColor:myColor.lightBlue,
-        justifyContent:'center',
-        alignItems:'center',
-        flexDirection:'row-reverse',
-        borderColor:'#fff',
-        borderWidth:1,
-        padding:4,
-        
-    },
-    comingSoon:{
-        textAlign: 'justify',
-        padding: 10,
-        fontSize:22,
-        color:myColor.red,
-        fontWeight:'bold',
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        top: 0,
-        bottom: 0,
-    },  
 })

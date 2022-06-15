@@ -17,17 +17,27 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppLoading from 'expo-app-loading';
 // import useFonts hook  
 import { useFonts } from "@use-expo/font";
+import { NativeBaseProvider } from 'native-base';
+import MainHeader from './src/components/MainHeader';
 
-SplashScreen.preventAutoHideAsync().then(configureBgNav).catch((error) => {    
-   console.warn("SplashScreen.preventAutoHideAsync error:", error);
-  });
-async function configureBgNav(){// configure nav bar color
-  try{
-    NavigationBar.setVisibilityAsync('hidden');
-    await NavigationBar.setButtonStyleAsync('dark');
+// SplashScreen.preventAutoHideAsync().then(configureBgNav).catch((error) => {    
+//    console.warn("SplashScreen.preventAutoHideAsync error:", error);
+//   });
+// async function configureBgNav(){// configure nav bar color
+//   try{
+//     NavigationBar.setVisibilityAsync('hidden');
+//     await NavigationBar.setButtonStyleAsync('dark');
+//   }
+//   catch(e){console.log(e)}
+// }
+async function userLogout(){
+  try {
+      // Remove user token from storage
+      await AsyncStorage.removeItem('id_token');
+  } catch (error) {
+      console.log('AsyncStorage error: ' + error.message);
   }
-  catch(e){console.log(e)}
-}
+};
 // Define a global text font for all the app
 const customFont = { 
   varelaRound: require("./assets/fonts/VarelaRound-Regular.ttf"),
@@ -41,7 +51,9 @@ function MainNavigator(){
         <Stack.Screen
          name='Home'
          component={HomePage}
-         options={{header:(props)=>null}}/>
+         options={{
+          header:(props)=><MainHeader logState={userLogout} {...props}/>
+          }}/>
         <Stack.Screen
          name='Login'
          component={Login}
@@ -101,7 +113,7 @@ const App = () =>{
   if (!isLoaded) {
       return <AppLoading />;
   }
-  return <NavigationContainer><StatusBar hidden={(Platform.OS==='ios')?false:true}/><MainNavigator/></NavigationContainer>;
+  return <NativeBaseProvider><NavigationContainer><StatusBar hidden={(Platform.OS==='ios')?false:true}/><MainNavigator/></NavigationContainer></NativeBaseProvider>;
       
 };
 export default App
