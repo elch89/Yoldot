@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useState, useEffect} from 'react';
 import {
     View,
     Text,
@@ -8,9 +8,11 @@ import {
     I18nManager,
     StyleSheet,
 } from 'react-native';
+import {LinearGradient} from 'expo-linear-gradient';
 import myColor from '../styles/colors'
 import Modal from 'react-native-modal'
 import StarRating from 'react-native-star-rating'
+
 const StoryModal = (props)=>{
     let story = []
     for(var i=0;i<props.selected.stories.length;i++){
@@ -62,16 +64,8 @@ const MyModal = (props)=>{
              onBackButtonPress={props.hideModal}>
                  {visible && <StoryModal selected={props.selected} modalVisible={visible} toggle={()=>toggleStories()}/>}
                 <TouchableOpacity activeOpacity={0} style={styles.modalStyle} onPress={props.hideModal}>
-                {/* <TouchableOpacity activeOpacity={0} style={styles.modalStyle} onPress={}> */}
                     <View style={{backgroundColor:myColor.darkBlue}}>
-                        <Text style={{
-                                fontSize:24, 
-                                color:'#fff',
-                                textAlign:'center',
-                                fontWeight:'bold',
-                                paddingBottom:10,
-                                paddingTop:6,
-                            }}>
+                        <Text style={[styles.title,]}>
                             {props.selected.title} 
                         </Text>
                     </View>
@@ -131,19 +125,16 @@ const MyModal = (props)=>{
         </View>
     );
 };
+function Rating(props){
+    const [hospitals, setHospitals] = useState([]);
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [selectedItem, setSelectedItem] = useState(null);
 
-export default class Rating extends React.Component{
-    constructor(props){
-        super(props)
-        this.state={
-            starCount:3.5,
-            hospitals:[],
-            isModalVisible: false,
-            selectedItem:null,
-        }
-    }
-    componentDidMount(){
-        const { route } = this.props;
+    useEffect(()=>{
+        fetchData();
+    },[])
+    const fetchData = () =>{
+        const { route } = props;
         let hospArr = route.params?.rating ?? 'A problem fetching data';
         let data = [];
         if(hospArr !=='A problem fetching data'){
@@ -154,85 +145,79 @@ export default class Rating extends React.Component{
                 {title:'שביעות רצון',tid:6,rate:parseFloat(hospArr[i].praty[6])}];
                 data.push({title:JSON.parse('"'+item.hospital+'"'),id:item.id,rate:parseFloat(hospArr[i].clali), items:categories, stories:hospArr[i].stories})
             });
-            this.setState({hospitals:data, });
+            setHospitals(data);
         }  
     }
-
     _hideMyModal = () => { 
-        this.setState({isModalVisible: false});
-    }
-
-    render(){
-        const hospitals = this.state.hospitals;
-        return(
-            <SafeAreaView>
-                { this.state.isModalVisible && <MyModal selected={this.state.selectedItem} modalVisible={this.state.isModalVisible} hideModal={this._hideMyModal} /> }
-                {/* Header */}
-                <View style={{backgroundColor:myColor.darkBlue}}>
-                    <Text style={{
-                        fontSize:24, 
-                        color:'#fff',
-                        textAlign:'center',
-                        fontWeight:'bold',
-                        paddingBottom:10,
-                        paddingTop:6,
-                    }}>
-                        בתי יולדות - ציון משוקלל
-                    </Text>
-                </View>
-                <FlatList
-                    style = {{paddingHorizontal:3}}
-                    showsVerticalScrollIndicator={false}
-                    horizontal={false}
-                    data={hospitals}// hospitals
-                    renderItem={({ item }) =>(
-                        <TouchableOpacity 
-                            onPress={()=>{this.toggleModal();this.setState({selectedItem:item})}}
-                            style={styles.list}>
-                            <StarRating
-                                disabled={true}
-                                containerStyle = {{ flex:1, padding:10, alignSelf:'center'}}
-                                maxStars={5}
-                                starSize={30}
-                                starStyle={{flex:1,transform: [{scaleX: I18nManager.isRTL ? -1 : 1}]}}
-                                fullStarColor={myColor.gold}
-                                halfStarColor={myColor.gold}
-                                emptyStarColor={myColor.gold}
-                                rating={item.rate}
-                            />
-                            {/* </View> */}
-                            <View 
-                                style={{
-                                    flex:1,
-                                    flexDirection:'row',
-                                    paddingHorizontal:5,
-                                    justifyContent:'center',
-                                    alignItems:'center'
-                            }}
-                            >
-                            <Text style = {{textAlign:'center',fontSize:18, flex:3, color:myColor.red}}>{item.title}</Text>
-                            <Text style = {{textAlign:'left',fontSize:14,flex:1}}>{'('+item.rate.toFixed(2)+')'}</Text>
-                            </View>
-                        </TouchableOpacity>
-                    )}
-                    keyExtractor={item => item.id.toString()}
-                />
-            </SafeAreaView>
-        )
+        setIsModalVisible(false);
     }
     toggleModal = () => {
-        this.setState({isModalVisible: !this.state.isModalVisible});
-      };
-    
+        setIsModalVisible(!isModalVisible);
+    };
+    const Item = ({item}) =>{
+        return (<TouchableOpacity 
+            onPress={()=>{toggleModal();setSelectedItem(item)}}
+            style={[styles.list, ]}
+            >
+            <StarRating
+                disabled={true}
+                containerStyle = {{ flex:1, padding:10, alignSelf:'center'}}
+                maxStars={5}
+                starSize={30}
+                starStyle={{flex:1,transform: [{scaleX: I18nManager.isRTL ? -1 : 1}]}}
+                fullStarColor={myColor.gold}
+                halfStarColor={myColor.gold}
+                emptyStarColor={myColor.gold}
+                rating={item.rate}
+            />
+            <View 
+                style={{
+                    flex:1,
+                    flexDirection:'row',
+                    paddingHorizontal:5,
+                    justifyContent:'center',
+                    alignItems:'center'
+            }}
+            >
+            <Text style = {{textAlign:'center',fontSize:18, flex:3, color:myColor.red, fontWeight:"bold"}}>{item.title}</Text>
+            <Text style = {{textAlign:'left',fontSize:14,flex:1, fontWeight:"bold"}}>{'('+item.rate.toFixed(2)+')'}</Text>
+            </View>
+        </TouchableOpacity>);
+    }
+    const listItem = ({item}) =><Item item={item} />;
+    return(
+        <SafeAreaView style={{flex:1}}>
+            <LinearGradient colors={[ myColor.gold,'#fff', myColor.lightBlue, myColor.darkBlue]}
+                        locations={[0,0.1,0.8,1]}
+                        style={{flex:1}}>
+            { isModalVisible && <MyModal selected={selectedItem} modalVisible={isModalVisible} hideModal={_hideMyModal} /> }
+            {/* Header */}
+            <View style={{backgroundColor:myColor.darkBlue,}}>
+                <Text style={[styles.title,]}>
+                    בתי יולדות - ציון משוקלל
+                </Text>
+            </View>
+            <FlatList
+                style = {{paddingHorizontal:3, backgroundColor:'transparent'}}
+                showsVerticalScrollIndicator={false}
+                horizontal={false}
+                data={hospitals}
+                renderItem={listItem}
+                keyExtractor={item => item.id.toString()}
+            />
+            </LinearGradient>
+        </SafeAreaView>
+    )
 }
-
+export default Rating;
 
 const styles = StyleSheet.create({
     list: {
         flexDirection: 'row-reverse',
-        flex:1,
+        // flex:1,
         borderTopWidth: 1,
         borderTopColor: myColor.darkBlue,
+        // height:64,
     },
     modalItem:{
         flexDirection:'column-reverse',
@@ -246,6 +231,14 @@ const styles = StyleSheet.create({
         alignContent:'stretch',
         borderWidth:3,
         borderColor:myColor.darkBlue,
+    },
+    title:{
+        fontSize:24, 
+        color:'#fff',
+        textAlign:'center',
+        fontWeight:'bold',
+        paddingBottom:10,
+        paddingTop:6,
     },
 
 });

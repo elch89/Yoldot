@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -6,7 +6,6 @@ import {
   View,
   Text,
   Alert,
-  Animated,
   Image,
   TouchableOpacity,
   TextInput,
@@ -17,81 +16,48 @@ import {LinearGradient} from 'expo-linear-gradient';
 import myColor from '../styles/colors'
 import {connection} from '../data/DataSource'
 
-export default class Register extends React.Component{
-    constructor(){
-        super();
-        this.state = {
-            email:null,
-            password:null,
-            username:null,
-            isTheSame:false,
-            varifypassword:null,
-            isValid:false,
-            errorEmail:1,
-            errorPasword:1,
-            errorUser:1,
-            uErrorVisible:false,
-            pErrorVisible:false,
-            eErrorVisible:false,
-        };
-        // refs for data providing keyboard focusing
-        this.ref_email = React.createRef();
-        this.ref_pass1 = React.createRef();
-        this.ref_pass2 = React.createRef();
-      }
-      // add listeners for keyboard on component mount
-      componentDidMount () {
-        this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
-        this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
-      }
-      // remove listeners  
-      componentWillUnmount () {
-        this.keyboardDidShowListener.remove();
-        this.keyboardDidHideListener.remove();
-      }
-      // actions to do when listeners are trigered - change opacity  
-      _keyboardDidShow = () => {
-        this.setState({imageOpacity:0.5})
-      }
-        
-      _keyboardDidHide = () => {
-        this.setState({imageOpacity:1});
-      }
-    userSignup() {
-        // if (!this.state.email || !this.state.password || !this.state.username || !this.state.isTheSame) {
-        //     Alert.alert('שגיאה','יש למלא את כל השדות');
-        //     return;
-        // }
+function Register(props){
+    const [email, setEmail] = useState(null);
+    const [password, setPassword] = useState(null);
+    const [username,setUsername] = useState(null);
+    const [isTheSame, setIsTheSame] = useState(false);
+    const [eEmail, setEEmail] = useState(1); 
+    const [ePassword, setEPassword] = useState(1); 
+    const [eUser, setEUser] = useState(1); 
+    const [uErrorVisible, setUErrorVisible] = useState(false); 
+    const [pErrorVisible, setPErrorVisible] = useState(false); 
+    const [eErrorVisible, setEErrorVisible] = useState(false); 
+    const [imageOpacity, setImageOpacity] = useState(1);
+
+    const ref_email = useRef(null);
+    const ref_pass1 = useRef(null);
+    const ref_pass2 = useRef(null);
+
+    useEffect(()=>{
+        const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {setImageOpacity(0.5)});
+        const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {setImageOpacity(1)});
+        return ()=>{
+            keyboardDidShowListener.remove();
+            keyboardDidHideListener.remove();
+        }
+    },[]);
+    const userSignup = () => {
         //  verify legit input...
-        let error = false;
-        if (!this.validateInput(this.state.email,'email')) {
-            this.setState({ errorEmail:3, eErrorVisible:true})  
-            error = true;          
+        if (!validateInput()){
+            return;
         }
-        if (!this.validateInput(this.state.password,'password')){
-            Alert.alert('שגיאה','הסיסמה צריכה להיות לפחות באורך 6 ובאנגלית, להכיל אותיות קטנות, אותיות גדולות ומספרים',
-                    [{ text: "חזרה", style: 'cancel', onPress: () => {} },]
-                );
-            this.setState({ errorPasword:3})
-            error = true; 
-        }
-        if(!this.validateInput(this.state.username, 'user')){
-            this.setState({errorUser:3, uErrorVisible:true})
-            error = true; 
-        }
-        if (!this.state.email || !this.state.password || !this.state.username || !this.state.isTheSame) {
+        if (!email || !password || !username || !isTheSame) {
             Alert.alert('שגיאה','יש למלא את כל השדות');
-            error = true;
+            return;
         }
-        if(error){return;}
         const resetAction = CommonActions.reset({
             index: 0,
             routes: [{ name: 'Login' }],
           });
         let fd = new FormData()
-        fd.append('email',this.state.email);
-        fd.append('password', this.state.password);
-        fd.append('name',this.state.username); 
+        fd.append('email',email);
+        fd.append('password', password);
+        fd.append('name', username); 
         fetch(connection.URL+'register.php', {
           method: 'POST',
           headers: { 
@@ -102,141 +68,144 @@ export default class Register extends React.Component{
         })
         .then((response) => response.json())
         .then((responseData) => {
-            console.log(responseData) ///
             if(responseData.error == true){
                 Alert.alert('שגיאה',responseData.error_msg)
             }
             else{
                 Alert.alert('הרשמה','תודה שנרשמת לאפליקציה\n\nנשלח לך אימייל אימות, יש לבצע אימות על מנת להתחבר למשתמשת')
-                // Should be varification first
-                this.props.navigation.dispatch(resetAction)
+                props.navigation.dispatch(resetAction)
             }
-          
         })
         .done();
-      }
-    render(){
-        const { width, height ,uri} = Image.resolveAssetSource(require('../../assets/img/yoldot_logoT.png'));
-        return(
-            <>  
-                <LinearGradient colors={[ myColor.gold,'#fff', myColor.lightBlue, myColor.darkBlue]}
-                            locations={[0,0.1,0.7,1]}
-                            style={styles.linearGradient}>
-                    
-                    <ScrollView 
-                        ref={(ref)=>this._scrollView = ref} // add reference for scrollView
-                        style={[styles.scrollView,]}//{marginTop:height}
-                        >
-                            <Image source={require('../../assets/img/yoldot_logoT.png')} style = {[styles.logo,{opacity:this.state.imageOpacity}]}/>
-                        <SafeAreaView>
-                        
-                        <View style = {[styles.container,]}>
-                            
-                            <Text style = {styles.fieldTxt}>שם</Text>
-                            <TextInput
-                                editable={true}
-                                onChangeText={(username) => this.setState({username})}
-                                placeholder='Username'
-                                ref='name'
-                                onSubmitEditing={() => this.ref_email.current.focus()}
-                                returnKeyType='next'
-                                value={this.state.username} 
-                                style={[styles.txtInp,{borderWidth:this.state.errorUser}]}/>
-                            {this.state.uErrorVisible && <View ><Text style = {styles.error}>*שם משתמש צריך להכיל לפחות 3 תווים</Text></View>}
-                            <View style={{marginBottom:10}}></View>
-                            <Text style = {styles.fieldTxt}>אי מייל</Text>
-                            <TextInput 
-                                editable={true}
-                                onChangeText = {(email)=>
-                                    {
-                                        this.setState({email});
-                                    }
-                                }
-                                placeholder = 'example@example.com'
-                                onSubmitEditing={() => this.ref_pass1.current.focus()}
-                                ref={this.ref_email}
-                                returnKeyType='next'
-                                value = {this.state.email}
-                                keyboardType='email-address' 
-                                textContentType='emailAddress' 
-                                style={[styles.txtInp,{borderWidth:this.state.errorEmail}]}/>
-                            {this.state.eErrorVisible && <View><Text style = {styles.error}>*אימייל לא תיקני</Text></View>}
-                            <View style={{marginBottom:10}}></View>
-                            <Text style = {styles.fieldTxt}>סיסמה</Text>
-                            <TextInput 
-                                editable={true}
-                                onChangeText={(password) => this.setState({password})}
-                                placeholder='Password'
-                                onSubmitEditing={() => this.ref_pass2.current.focus()}
-                                ref={this.ref_pass1}
-                                returnKeyType='next'
-                                value={this.state.password}
-                                textContentType='password' 
-                                secureTextEntry={true} 
-                                autoCorrect={false}
-                                autoCapitalize='none'
-                                style={[styles.txtInp,{borderWidth:this.state.errorPasword, marginBottom:10}]}/>
-                            <Text style = {styles.fieldTxt}>אימות סיסמה</Text>
-                            <TextInput 
-                                onChangeText={(password) => this.comparePasswords(password)}
-                                editable={true}
-                                ref={this.ref_pass2}
-                                style={[styles.txtInp,{borderWidth:this.state.errorPasword,}]} 
-                                textContentType='password' 
-                                placeholder='Password'
-                                returnKeyType='next'
-                                value={this.state.varifypassword}
-                                secureTextEntry={true}
-                                autoCorrect={false}
-                                autoCapitalize='none' />
-                            {this.state.pErrorVisible && <View><Text style = {styles.error}>*סיסמאות לא זהות</Text></View>}
-                            <View style={{marginBottom:10}}></View>
-                            <TouchableOpacity 
-                            style = {styles.btnContainer}
-                            onPress={this.userSignup.bind(this)}
-                            >
-                                <View style={{justifyContent:'center'}}
-                            //  onLayout={(event) => {
-                            //   var {x, y, width, height} = event.nativeEvent.layout;
-                            //   console.log('width: '+width + ',  height: ' + height);
-                            // }}
-                            >
-                                    <Text style={{textAlign:'center',color: 'white', fontSize:18, padding: 12}}>
-                                        {'הרשמי'}
-                                    </Text>
-                                </View>
-                            </TouchableOpacity>
-                        </View>
-                        </SafeAreaView>
-                    </ScrollView>
-                    </LinearGradient>
-            </>
-        )
     }
-    comparePasswords(str){
-        if(str === this.state.password){
-            this.setState({isTheSame:true, errorPasword:1,pErrorVisible:false})
+    const comparePasswords = (str) => {
+        if(str === password){
+            setIsTheSame(true);
+            setEPassword(1);
+            setPErrorVisible(false);
         }
         else{ 
-            this.setState({isTheSame:false, errorPasword:3,pErrorVisible:true}) 
+            setIsTheSame(false);
+            setEPassword(3);
+            setPErrorVisible(true);
         }
     }
-    validateInput = (inp, type) => {
-        var re = null;
-        if(type === 'email'){
-            re = /^(([^<>()\[\]\\.,;:\s@”]+(\.[^<>()\[\]\\.,;:\s@”]+)*)|(“.+”))@((\[[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}])|(([a-zA-Z\-0–9]+\.)+[a-zA-Z]{2,}))$/;
-        };
-        if(type === 'password'){
-            re = /^(((?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])))(?=.{6,})/;
-        };
-        if(type === 'user'){
-            re = /^(?=.{3,})/
+    const validateInput = (inp, type) => {
+        let valid = true;
+        let reE = /^(([^<>()\[\]\\.,;:\s@”]+(\.[^<>()\[\]\\.,;:\s@”]+)*)|(“.+”))@((\[[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}])|(([a-zA-Z\-0–9]+\.)+[a-zA-Z]{2,}))$/;
+        let reP = /^(((?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])))(?=.{6,})/;
+        let reU = /^(?=.{3,})/;
+        if(!reE.test(email)){
+            setEEmail(3);
+            setEErrorVisible(true);
+            valid = false;
         }
-        if(re == null) return;
-        return re.test(inp); 
-
+        if(!reP.test(password)){
+            Alert.alert('שגיאה','הסיסמה צריכה להיות לפחות באורך 6 ובאנגלית, להכיל אותיות קטנות, אותיות גדולות ומספרים',
+                    [{ text: "חזרה", style: 'cancel', onPress: () => {} },]
+                );
+            setEPassword(3);
+            valid = false;
+        }
+        if(!reU.test(username)){
+            setEUser(3);
+            setUErrorVisible(true);
+            valid = false;
+        }
+        return valid;
     }
+    return(
+        <SafeAreaView style={{flex:1}}>  
+            <LinearGradient colors={[ myColor.gold,'#fff', myColor.lightBlue, myColor.darkBlue]}
+                        locations={[0,0.1,0.7,1]}
+                        style={styles.linearGradient}>
+                
+                <ScrollView 
+                    style={[styles.scrollView,]}//{marginTop:height}
+                    >
+                        <Image source={require('../../assets/img/yoldot_logoT.png')} style = {[styles.logo,{opacity:imageOpacity}]}/>
+                    <SafeAreaView>
+                    
+                    <View style = {[styles.container,]}>
+                        
+                        <Text style = {styles.fieldTxt}>שם</Text>
+                        <TextInput
+                            editable={true}
+                            onChangeText={(username) => setUsername(username)}
+                            placeholder='Username'
+                            onSubmitEditing={()=>ref_email.current.focus()}
+                            returnKeyType='next'
+                            value={username} 
+                            style={[styles.txtInp,{borderWidth:eUser}]}/>
+                        {uErrorVisible && <View ><Text style = {styles.error}>*שם משתמש צריך להכיל לפחות 3 תווים</Text></View>}
+                        <View style={{marginBottom:10}}></View>
+                        <Text style = {styles.fieldTxt}>אי מייל</Text>
+                        <TextInput 
+                            editable={true}
+                            onChangeText = {(email)=>
+                                {
+                                    setEmail(email);
+                                }
+                            }
+                            placeholder = 'example@example.com'
+                            onSubmitEditing={()=>ref_pass1.current.focus()}
+                            ref={ref_email}
+                            returnKeyType='next'
+                            value = {email}
+                            keyboardType='email-address' 
+                            textContentType='emailAddress' 
+                            style={[styles.txtInp,{borderWidth:eEmail}]}/>
+                        {eErrorVisible && <View><Text style = {styles.error}>*אימייל לא תיקני</Text></View>}
+                        <View style={{marginBottom:10}}></View>
+                        <Text style = {styles.fieldTxt}>סיסמה</Text>
+                        <TextInput 
+                            editable={true}
+                            onChangeText={(password) => setPassword(password)}
+                            placeholder='Password'
+                            onSubmitEditing={()=>ref_pass2.current.focus()}
+                            ref={ref_pass1}
+                            returnKeyType='next'
+                            value={password}
+                            textContentType='password' 
+                            secureTextEntry={true} 
+                            autoCorrect={false}
+                            autoCapitalize='none'
+                            style={[styles.txtInp,{borderWidth:ePassword, marginBottom:10}]}/>
+                        <Text style = {styles.fieldTxt}>אימות סיסמה</Text>
+                        <TextInput 
+                            onChangeText={(password) => comparePasswords(password)}
+                            editable={true}
+                            ref={ref_pass2}
+                            style={[styles.txtInp,{borderWidth:ePassword,}]} 
+                            textContentType='password' 
+                            placeholder='Password'
+                            returnKeyType='next'
+                            value={null}
+                            secureTextEntry={true}
+                            autoCorrect={false}
+                            autoCapitalize='none' />
+                        {pErrorVisible && <View><Text style = {styles.error}>*סיסמאות לא זהות</Text></View>}
+                        <View style={{marginBottom:10}}></View>
+                        <TouchableOpacity 
+                        style = {styles.btnContainer}
+                        onPress={userSignup}
+                        >
+                            <View style={{justifyContent:'center'}}
+                        >
+                                <Text style={{textAlign:'center',color: 'white', fontSize:18, padding: 12}}>
+                                    {'הרשמי'}
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                    </SafeAreaView>
+                </ScrollView>
+                </LinearGradient>
+        </SafeAreaView>
+    )
 }
+export default Register;
+
 const styles = StyleSheet.create({
     logo:{
         backgroundColor: 'transparent',

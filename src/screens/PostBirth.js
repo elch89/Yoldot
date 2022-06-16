@@ -140,7 +140,7 @@ function Feedback(props){
     }
     // filters for ignoring cards , include skip logic
     const filterBack=()=>{
-        let idx = current-1
+        let idx = current-1;
         const boolDepend = surveyQuestions[idx].depends /// 0/1
         if(boolDepend === 1){ // Skip backwords
             while(surveyQuestions[idx].depends === 1){

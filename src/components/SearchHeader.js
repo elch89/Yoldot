@@ -43,10 +43,13 @@ const SearchBox = (props) =>{
     return(
       <Center flex={1} >
         <Select borderColor={myColor.darkBlue} 
+          _actionSheetContent={
+            {disableOverlay:true}
+          }
           fontWeight="bold"
           fontSize={"lg"} 
           textAlign="center" 
-          selectedValue={selected}
+          selectedValue="selected"
           w={"90%"}
           accessibilityLabel="בחרי בית חולים" 
           placeholder="בחרי בית חולים" 

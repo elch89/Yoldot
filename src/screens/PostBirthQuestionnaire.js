@@ -15,6 +15,7 @@ import DateTimePicker from '@react-native-community/datetimepicker'
 import SelectableFlatlist, { STATE } from 'react-native-selectable-flatlist';
 import NumericInput from 'react-native-numeric-input'
 import StarRating from 'react-native-star-rating'
+import CustomList from '../components/CustomFlatList';
 // import CustomList from '../components/CustomFlatList'
 
 
@@ -60,6 +61,7 @@ function Questionnaire(props) {
         if(props.questid >=4){
             idx = props.questid-2;
         }
+        console.log(answers[idx].answer[0].val)
         if(answers[idx] === undefined){
             return
         }
@@ -85,7 +87,7 @@ function Questionnaire(props) {
     const onChangeText=(text)=>{setInpTxt(text)};
     const datepicker = () => {setShowDate(true);}
     const onItemsSelected = (selectedItem) => {
-        
+
         entry= {qid: props.questid,
             selectedItem: selectedItem,
             qtype: props.type,}
@@ -127,12 +129,11 @@ function Questionnaire(props) {
 
             return(
             <View style = {{flex:1}}>
-                
                 {/* <CustomList data={ynArray(qid)} 
                             qType={qType} 
                             initialSelected={initialSelected}
                             itemsSelected={(selectedItem) => { onItemsSelected(selectedItem); }} /> */}
-                <SelectableFlatlist
+                <SelectableFlatlist ff
                     data={multipleOrYn(qType) ?ynArray(qid):generateAnswers(qid)}
                     state={STATE.EDIT}
                     multiSelect={false}// true for more than 1 options
@@ -201,6 +202,7 @@ function Questionnaire(props) {
                 <View style = {styles.contentStyle}>
                 <TextInput style={styles.txtInp}
                 value={inpTxt}
+                keyboardType="default"
                 onChangeText={text => onChangeText(text)}
                 onSubmitEditing = {(edit)=>{onItemsSelected([{aid:0,val:edit.nativeEvent.text}])}}/></View>
             );
@@ -298,7 +300,7 @@ function Questionnaire(props) {
                 if(qid >=4){
                     tmpIt = qid-2;
                 }
-                // console.log(submitted[tmpIt])//
+                console.log(submitted[tmpIt])//
                 // console.log(entry.selectedItem) //entry.selectedItem.length>0 ||
                 if( submitted[tmpIt].answer.length>0 || qid === 48)//48
                     props.onPressNext();

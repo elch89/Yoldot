@@ -1,28 +1,58 @@
-// import React, { useCallback, useEffect, useState } from 'react';
-// import lodash from 'lodash';
-// import {
-//     View,
-//     Text,
-//     StyleSheet,
-//     TouchableOpacity,
-//     FlatList,
-//     Button,
-// } from 'react-native'
-// import PropTypes from 'prop-types';
-// import myColor from '../styles/colors'
+import React, { useCallback, useEffect, useState } from 'react';
+import {
+  FlatList,
+  SafeAreaView,
+  StatusBar,
+  StyleSheet,
+  // Text,
+  TouchableOpacity,
+} from 'react-native'
+import { Text,Pressable,HStack, Spacer , NativeBaseProvider, Box, Center } from 'native-base';
+import myColor from '../styles/colors'
+import { FontAwesome } from '@expo/vector-icons';
 // import  Icon  from 'react-native-vector-icons/FontAwesome';
-// CustomList.propTypes ={
-//     data:PropTypes.array,
-//     qType:PropTypes.string,
-//     initialSelected:PropTypes.any,
-//     itemsSelected:PropTypes.func,
-// }
-// CustomList.defaultProps = {
-//     initialSelected:[],
-//     data:[],
-// }
-// // PASS data back to father // TODO
-// function CustomList(props){
+  const Item = ({ item, onPress, iconColor }) =>(
+    <Pressable onPress={onPress} bg="coolGray.300"><Box p="5" maxW="96"><HStack alignItems={"center"}>
+     <Text fontSize={28} fontWeight="bold">{item.val}</Text>
+     <Spacer/>
+      <FontAwesome name='check-circle-o'  color={iconColor.iconColor} size={48}/>
+      </HStack></Box></Pressable>
+  );
+function CustomList(props){
+    const [selectedId, setSelectedId] = useState(null);
+    const {qType, data, initialSelected, itemsSelected} = props;
+    const isMulti = (qType==="checkbox")?true:false;
+    // itemsSelected([data[1]])
+    // console.log(initialSelected)
+    
+    // initial selected is array of aid
+    const renderItem = ({ item }) => {
+      
+        const iconColor = item.aid === selectedId ? myColor.darkBlue : '#0000003a';
+        // if(initialSelected.length>0){
+        //   const itr = initialSelected.filter((id)=>id===item.aid);
+        //   console.log(itr)
+        //   setSelectedId(itr.shift())
+        // }
+        return (
+            <Item
+                item={item}
+                onPress={() => {setSelectedId(item.aid); itemsSelected([item])}}
+                iconColor={{iconColor}}
+            />
+        );
+    };
+
+    return (<NativeBaseProvider>
+    <SafeAreaView style={styles.container}>
+      <FlatList
+        data={data}
+        renderItem={renderItem}
+        keyExtractor={item => item.aid}
+        extraData={selectedId}
+      />
+    </SafeAreaView></NativeBaseProvider>
+  );};
 //     const {qType, data, initialSelected, itemsSelected} = props
 //     const [selectedItems, setSelectedItem] = useState([]);
 //     // var boolList=Array(data.length).fill(false);// []...false
@@ -127,7 +157,23 @@
 //     </TouchableOpacity>)}
 // );
 
-    
+const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      marginTop: StatusBar.currentHeight || 0,
+    },
+    item: {
+        flex: 1,
+        justifyContent: 'center',
+        alignContent:'center',
+        // alignItems: 'flex-start',
+        paddingHorizontal: 30,
+      flexDirection:"row"
+    },
+    title: {
+        fontWeight:'bold',fontSize:28, 
+    },
+  });    
 // const styles = StyleSheet.create({
 //     rowItem:{
 //         backgroundColor:'transparent',
@@ -136,4 +182,4 @@
 //         flexDirection:'row',
 //     },
 // });
-// export default CustomList;
+export default CustomList;
