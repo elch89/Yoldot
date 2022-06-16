@@ -9,7 +9,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import {LinearGradient} from 'expo-linear-gradient';
-import {NativeBaseProvider, VStack} from 'native-base'
+import { VStack} from 'native-base'
 import Details from './CompareHospitalsDetails'
 import SearchBox  from '../components/SearchHeader'
 import myColor from '../styles/colors'
@@ -165,7 +165,7 @@ function Compare(props){
       </View>
    );
   }
-  return (<NativeBaseProvider >
+  return (
       <SafeAreaView style={{flex:1}}>
       <LinearGradient colors={[ myColor.gold,'#fff', myColor.lightBlue, myColor.darkBlue]}
                         locations={[0,0.1,0.7,1]}
@@ -189,8 +189,7 @@ function Compare(props){
             </VStack>
           </VStack> 
           </LinearGradient>   
-      </SafeAreaView>
-      </NativeBaseProvider>);
+      </SafeAreaView>);
 }
 export default Compare;
 

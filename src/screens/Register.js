@@ -15,6 +15,7 @@ import { CommonActions} from '@react-navigation/native';
 import {LinearGradient} from 'expo-linear-gradient';
 import myColor from '../styles/colors'
 import {connection} from '../data/DataSource'
+import { Alert as NbAlert, HStack, useToast, Box, FormControl, Input,WarningOutlineIcon } from 'native-base';
 
 function Register(props){
     const [email, setEmail] = useState(null);
@@ -28,6 +29,7 @@ function Register(props){
     const [pErrorVisible, setPErrorVisible] = useState(false); 
     const [eErrorVisible, setEErrorVisible] = useState(false); 
     const [imageOpacity, setImageOpacity] = useState(1);
+    const toast = useToast();
 
     const ref_email = useRef(null);
     const ref_pass1 = useRef(null);
@@ -47,7 +49,8 @@ function Register(props){
             return;
         }
         if (!email || !password || !username || !isTheSame) {
-            Alert.alert('שגיאה','יש למלא את כל השדות');
+            toastMessege('יש למלא את כל השדות')
+            // Alert.alert('שגיאה','יש למלא את כל השדות');
             return;
         }
         const resetAction = CommonActions.reset({
@@ -90,6 +93,19 @@ function Register(props){
             setPErrorVisible(true);
         }
     }
+    const toastMessege = (msg) =>{
+        toast.show({
+          render: () => {
+            return (<Box rounded="sm" px="2" py="1" bg="warning.200">
+                  <HStack flexShrink={1} space={2} justifyContent="space-between">
+            <NbAlert.Icon mt="1" color="warning.800" />
+          <Text style={{textAlign:'center', margin:2, fontWeight:"bold"}}>
+            {msg}
+          </Text>
+          </HStack></Box>);
+          }
+        });
+      };
     const validateInput = (inp, type) => {
         let valid = true;
         let reE = /^(([^<>()\[\]\\.,;:\s@”]+(\.[^<>()\[\]\\.,;:\s@”]+)*)|(“.+”))@((\[[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}])|(([a-zA-Z\-0–9]+\.)+[a-zA-Z]{2,}))$/;
@@ -101,9 +117,10 @@ function Register(props){
             valid = false;
         }
         if(!reP.test(password)){
-            Alert.alert('שגיאה','הסיסמה צריכה להיות לפחות באורך 6 ובאנגלית, להכיל אותיות קטנות, אותיות גדולות ומספרים',
-                    [{ text: "חזרה", style: 'cancel', onPress: () => {} },]
-                );
+            toastMessege('הסיסמה צריכה להיות לפחות באורך 6 ובאנגלית, להכיל אותיות קטנות, אותיות גדולות ומספרים')
+            // Alert.alert('שגיאה','הסיסמה צריכה להיות לפחות באורך 6 ובאנגלית, להכיל אותיות קטנות, אותיות גדולות ומספרים',
+            //         [{ text: "חזרה", style: 'cancel', onPress: () => {} },]
+            //     );
             setEPassword(3);
             valid = false;
         }
@@ -140,6 +157,16 @@ function Register(props){
                         {uErrorVisible && <View ><Text style = {styles.error}>*שם משתמש צריך להכיל לפחות 3 תווים</Text></View>}
                         <View style={{marginBottom:10}}></View>
                         <Text style = {styles.fieldTxt}>אי מייל</Text>
+                        {/* <FormControl isInvalid>
+                            <FormControl.Label>אי מייל</FormControl.Label>
+                            <Input 
+                                value = {email} 
+                                placeholder='example@example.com'
+                                onChangeText = {(email)=>setEmail(email)} />
+                            <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
+                            אימייל לא תיקני
+                            </FormControl.ErrorMessage>
+                        </FormControl> */}
                         <TextInput 
                             editable={true}
                             onChangeText = {(email)=>

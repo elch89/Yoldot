@@ -4,46 +4,36 @@ import {
   SafeAreaView,
   StatusBar,
   StyleSheet,
-  // Text,
+  Text,
   TouchableOpacity,
 } from 'react-native'
-import { Text,Pressable,HStack, Spacer , NativeBaseProvider, Box, Center } from 'native-base';
+import { Icon,IconButton ,HStack, Heading , Box, Center } from 'native-base';
 import myColor from '../styles/colors'
 import { FontAwesome } from '@expo/vector-icons';
 // import  Icon  from 'react-native-vector-icons/FontAwesome';
   const Item = ({ item, onPress, iconColor }) =>(
-    <Pressable onPress={onPress} bg="coolGray.300"><Box p="5" maxW="96"><HStack alignItems={"center"}>
-     <Text fontSize={28} fontWeight="bold">{item.val}</Text>
-     <Spacer/>
+    <TouchableOpacity onPress={onPress} style={[styles.item, ]}>
+      <Text style={[styles.title, {paddingHorizontal:18}]}>{item.val}</Text>
       <FontAwesome name='check-circle-o'  color={iconColor.iconColor} size={48}/>
-      </HStack></Box></Pressable>
+    </TouchableOpacity>
   );
 function CustomList(props){
     const [selectedId, setSelectedId] = useState(null);
     const {qType, data, initialSelected, itemsSelected} = props;
     const isMulti = (qType==="checkbox")?true:false;
-    // itemsSelected([data[1]])
-    // console.log(initialSelected)
-    
     // initial selected is array of aid
     const renderItem = ({ item }) => {
-      
         const iconColor = item.aid === selectedId ? myColor.darkBlue : '#0000003a';
-        // if(initialSelected.length>0){
-        //   const itr = initialSelected.filter((id)=>id===item.aid);
-        //   console.log(itr)
-        //   setSelectedId(itr.shift())
-        // }
         return (
             <Item
                 item={item}
-                onPress={() => {setSelectedId(item.aid); itemsSelected([item])}}
+                onPress={() => setSelectedId(item.aid)}
                 iconColor={{iconColor}}
             />
         );
     };
 
-    return (<NativeBaseProvider>
+    return (
     <SafeAreaView style={styles.container}>
       <FlatList
         data={data}
@@ -51,7 +41,7 @@ function CustomList(props){
         keyExtractor={item => item.aid}
         extraData={selectedId}
       />
-    </SafeAreaView></NativeBaseProvider>
+    </SafeAreaView>
   );};
 //     const {qType, data, initialSelected, itemsSelected} = props
 //     const [selectedItems, setSelectedItem] = useState([]);
@@ -165,8 +155,7 @@ const styles = StyleSheet.create({
     item: {
         flex: 1,
         justifyContent: 'center',
-        alignContent:'center',
-        // alignItems: 'flex-start',
+        alignItems: 'flex-start',
         paddingHorizontal: 30,
       flexDirection:"row"
     },

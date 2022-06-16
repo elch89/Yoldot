@@ -11,6 +11,7 @@ import {
   TextInput,
   Keyboard,
 } from 'react-native';
+import { Alert as NbAlert, HStack, useToast, Box } from 'native-base';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CommonActions } from '@react-navigation/native';
 import {LinearGradient} from 'expo-linear-gradient';
@@ -23,8 +24,10 @@ function Login(props){
   const [eBoxWidth, setEBoxWidth] = useState(1); //emailBoxWidth
   const [eErrorVisible, setEErrorVisible] = useState(false);
   const [imageOpacity,setImageOpacity] = useState(1);
+  const [btnPressed, setBtnPressed] = useState(false);
   const ref_email = useRef(null);
-
+  const toast = useToast();
+  
   useEffect(()=>{// add listeners for keyboard on component mount
     const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {setImageOpacity(0.5)});
     const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {setImageOpacity(1)});
@@ -40,14 +43,29 @@ function Login(props){
       console.log('AsyncStorage error: ' + error.message);
     }
   }
+  const toastMessege = (msg) =>{
+    toast.show({
+      render: () => {
+        return (<Box rounded="sm" px="2" py="1" bg="warning.200">
+              <HStack flexShrink={1} space={2} justifyContent="space-between">
+        <NbAlert.Icon mt="1" color="warning.800" />
+      <Text style={{textAlign:'center', margin:2, fontWeight:"bold"}}>
+        {msg}
+      </Text>
+      </HStack></Box>);
+      }
+    });
+  };
   const validateInput=(input)=>{
     var re = /^(([^<>()\[\]\\.,;:\s@”]+(\.[^<>()\[\]\\.,;:\s@”]+)*)|(“.+”))@((\[[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}])|(([a-zA-Z\-0–9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(input);
   }
   const userLogin = () => {
     // empty fields and verify
-    if (!email || !password ){ 
-      Alert.alert('שגיאה','יש למלא את כל השדות');
+    if (!email || !password ){
+      toastMessege('יש למלא את כל השדות')
+          
+      // Alert.alert('שגיאה','יש למלא את כל השדות');
       return;
     }
     if( !validateInput(email)){
@@ -81,12 +99,13 @@ function Login(props){
       saveItem('user_name', responseData.user.name)
       props.navigation.dispatch(resetAction)
     }
-    }).catch((error)=>Alert.alert('שגיאה','יש לבדוק את חיבור האינטרנט'))
+    }).catch((error)=>toastMessege('יש לבדוק את חיבור האינטרנט '))//Alert.alert('שגיאה','יש לבדוק את חיבור האינטרנט'))
     .done();
   }
   const passwordReset = () =>{
     if (!email){ 
-      Alert.alert('שגיאה','יש להכניס אימייל ');
+      toastMessege('יש להכניס אימייל ')
+      // Alert.alert('שגיאה','יש להכניס אימייל ');
       return;
     }
     // create post parameters
@@ -107,7 +126,7 @@ function Login(props){
             
             <LinearGradient colors={[ myColor.gold,'#fff', myColor.lightBlue, myColor.darkBlue]}
                             locations={[0,0.1,0.7,1]}
-                            style={styles.linearGradient}
+                            style={{flex:1}}
                             >
                 
             <ScrollView
@@ -226,9 +245,6 @@ const styles = StyleSheet.create({
 
     sectionContainer: {
       paddingHorizontal: 24,
-    },
-    linearGradient: {
-      flex: 1,
     },
     fieldTxt:{
       fontSize: 16,

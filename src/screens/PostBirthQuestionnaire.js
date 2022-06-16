@@ -8,8 +8,7 @@ import {
     Platform
 
 } from 'react-native';
-import{ Picker} from '@react-native-picker/picker'
-import { Select, NativeBaseProvider, CheckIcon, Box, Center } from "native-base";
+import { Select, CheckIcon, Box, Center } from "native-base";
 import myColor from '../styles/colors'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import SelectableFlatlist, { STATE } from 'react-native-selectable-flatlist';
@@ -61,7 +60,6 @@ function Questionnaire(props) {
         if(props.questid >=4){
             idx = props.questid-2;
         }
-        console.log(answers[idx].answer[0].val)
         if(answers[idx] === undefined){
             return
         }
@@ -85,9 +83,9 @@ function Questionnaire(props) {
         onItemsSelected([{aid:0,val:rating}])
     }
     const onChangeText=(text)=>{setInpTxt(text)};
-    const datepicker = () => {setShowDate(true);}
+    const datepicker = () => {setShowDate(!showDate);}
     const onItemsSelected = (selectedItem) => {
-
+        
         entry= {qid: props.questid,
             selectedItem: selectedItem,
             qtype: props.type,}
@@ -133,7 +131,7 @@ function Questionnaire(props) {
                             qType={qType} 
                             initialSelected={initialSelected}
                             itemsSelected={(selectedItem) => { onItemsSelected(selectedItem); }} /> */}
-                <SelectableFlatlist ff
+                <SelectableFlatlist
                     data={multipleOrYn(qType) ?ynArray(qid):generateAnswers(qid)}
                     state={STATE.EDIT}
                     multiSelect={false}// true for more than 1 options
@@ -202,15 +200,14 @@ function Questionnaire(props) {
                 <View style = {styles.contentStyle}>
                 <TextInput style={styles.txtInp}
                 value={inpTxt}
-                keyboardType="default"
                 onChangeText={text => onChangeText(text)}
                 onSubmitEditing = {(edit)=>{onItemsSelected([{aid:0,val:edit.nativeEvent.text}])}}/></View>
             );
         }
         if(qType === 'open_numeric'){
             let numOfBirth = 0;
-            if(props.submitted[qid-1].answer.length>0){
-                numOfBirth = props.submitted[qid-1].answer[0].val;
+            if(props.submitted[qid-2].answer.length>0){
+                numOfBirth = props.submitted[qid-2].answer[0].val;
             }
             return(
                 <View style = {[styles.contentStyle, {alignItems:'center'}]}>
@@ -260,7 +257,7 @@ function Questionnaire(props) {
             <DateTimePicker 
                 value={currDate}
                 mode = 'date'
-                display="default"
+                display="spinner"
                 maximumDate={new Date()}// Limit selection
                 onChange={setDate} 
                 // onChange={(e)=>{if(e.type == 'set'){this.setDate()}}} 
@@ -300,7 +297,7 @@ function Questionnaire(props) {
                 if(qid >=4){
                     tmpIt = qid-2;
                 }
-                console.log(submitted[tmpIt])//
+                // console.log(submitted[tmpIt])//
                 // console.log(entry.selectedItem) //entry.selectedItem.length>0 ||
                 if( submitted[tmpIt].answer.length>0 || qid === 48)//48
                     props.onPressNext();
@@ -332,8 +329,7 @@ function Questionnaire(props) {
     }
         
     // Final render, 
-    return(
-        <NativeBaseProvider><View style={styles.cardView} >
+    return(<View style={styles.cardView} >
         <View style={{flex:6}}>
             <View style={[styles.section]}>
                 <Text style={styles.titles}>{props.question}</Text>
@@ -349,7 +345,7 @@ function Questionnaire(props) {
             paddingHorizontal:20}}>
             {touchable}
         </View> 
-    </View></NativeBaseProvider>);
+    </View>);
     
 }
 
