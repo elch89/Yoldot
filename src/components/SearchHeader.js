@@ -12,11 +12,11 @@ import myColor from '../styles/colors'
 
 const SearchBox = (props) =>{
   const [selectedItems,setSelectedItems] = useState([]);
-  const [selected, setSelected] = useState("בחרי בית חולים")
+  const [placeholder, setPlaceholder] = useState("")
 
   const sendToParent =() =>props.callbackFromParent(selectedItems);
-
-  useEffect(sendToParent,[selectedItems]);
+  const togglePlaceholder=()=>(selectedItems.length===1)?setPlaceholder('בחרי בית חולים שני'):setPlaceholder('בחרי בית חולים ראשון להשוואה')
+  useEffect(()=>{sendToParent();togglePlaceholder()},[selectedItems]);
 
   const renderSelected=()=>{
     let selectedArray = Array()
@@ -52,14 +52,14 @@ const SearchBox = (props) =>{
           selectedValue="selected"
           w={"90%"}
           accessibilityLabel="בחרי בית חולים" 
-          placeholder="בחרי בית חולים" 
+          placeholder={placeholder}
           _selectedItem={{
             bg: myColor.lightBlue,
             endIcon: <CheckIcon size="6" color={myColor.red}/>}} 
           mt={1} 
           onValueChange={(value)=>{
             var entry = props.hospitals.filter((sitem) => sitem.id === value)
-            // setSelected(entry[0].name);
+            
             setSelectedItems(selectedItems=>[...selectedItems,entry[0]]);
           }}>
           {props.hospitals.map((item,i) =>  

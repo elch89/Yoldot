@@ -1,8 +1,9 @@
 import React,{useEffect, useState} from 'react';
-import * as SplashScreen from "expo-splash-screen";
-import { Platform} from 'react-native';
-import {NavigationContainer , CommonActions, StackActions} from '@react-navigation/native';
+// import * as SplashScreen from "expo-splash-screen";
+import { Platform, SafeAreaView} from 'react-native';
+import {NavigationContainer , CommonActions, StackActions } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { HeaderBackButton } from '@react-navigation/elements';
 import {Rating,
     Register,
     Login,
@@ -19,6 +20,7 @@ import AppLoading from 'expo-app-loading';
 import { useFonts } from "@use-expo/font";
 import { NativeBaseProvider } from 'native-base';
 import MainHeader from './src/components/MainHeader';
+import colors from './src/styles/colors';
 
 // SplashScreen.preventAutoHideAsync().then(configureBgNav).catch((error) => {    
 //    console.warn("SplashScreen.preventAutoHideAsync error:", error);
@@ -52,7 +54,7 @@ function MainNavigator(){
          name='Home'
          component={HomePage}
          options={{
-          header:(props)=><MainHeader logState={userLogout} {...props}/>
+          header:(props)=><SafeAreaView style={{height:80}}><MainHeader logState={userLogout} {...props}/></SafeAreaView>
           }}/>
         <Stack.Screen
          name='Login'
@@ -73,7 +75,17 @@ function MainNavigator(){
          <Stack.Screen
          name='Rating'
          component={Rating}
-         options={{header:(props)=>null}}/>
+         options={{
+          headerTitle:'בתי יולדות - ציון משוקלל',
+          headerStyle:{backgroundColor:colors.darkBlue},
+          headerTitleStyle:{
+            fontSize:24, 
+            color:'#fff',
+            textAlign:'center',
+            fontWeight:'bold',
+          },
+          headerTintColor: '#fff',
+          }}/>
          <Stack.Screen
          name='initScreen'
          component={InitScreen}

@@ -459,7 +459,7 @@ const questionsIos =[{
      {
       "depends": 0,
       "id": 4,
-      "question": "מספר לידה",
+      "question": "מספר הלידה",
       "type": "open_numeric",
     },
      {
@@ -471,7 +471,7 @@ const questionsIos =[{
      {
       "depends": 1,
       "id": 6,
-      "question": "פרטי:",
+      "question": "אנא פרטי:",
       "type": "open_short",
     },
      {
