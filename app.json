@@ -26,7 +26,8 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.yoldot"
+      "bundleIdentifier": "com.yoldot",
+      "buildNumber":"1.0.1"
     },
     "android": {
       "versionCode":2,

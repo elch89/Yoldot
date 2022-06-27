@@ -21,7 +21,7 @@
         "simulator": true
       }
     },
-    "production": {"credentialsSource": "local"}
+    "production": {"credentialsSource": "remote"}
   },
   "submit": {
     "production": {
@@ -30,7 +30,9 @@
         "track":"internal"
       },
       "ios":{
-
+        "appleId":"elchib89@gmail.com",
+        "ascAppId":"1625959262",
+        "appleTeamId":"NYGZZ7WH63"
       }
     }
   }
