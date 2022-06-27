@@ -10,9 +10,6 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "androidNavigationBar": {
-      "visible": "sticky-immersive"
-    },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
@@ -29,7 +26,7 @@
       "bundleIdentifier": "com.yoldot"
     },
     "android": {
-      "versionCode":2,
+      "versionCode": 3,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"

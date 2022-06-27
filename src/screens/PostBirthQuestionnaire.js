@@ -14,7 +14,6 @@ import DateTimePicker from '@react-native-community/datetimepicker'
 import SelectableFlatlist, { STATE } from 'react-native-selectable-flatlist';
 import NumericInput from 'react-native-numeric-input'
 import StarRating from 'react-native-star-rating'
-import CustomList from '../components/CustomFlatList';
 // import CustomList from '../components/CustomFlatList'
 
 
@@ -105,8 +104,10 @@ function Questionnaire(props) {
         )
     const setDate = (event, date) => {
         if(event.type == 'dismissed'){
+            
             return;
         }
+        console.log(date)
         date = date || currDate;
         setShowDate(Platform.OS === 'ios' ? true : false);
         setCurrDate(date)
@@ -260,7 +261,6 @@ function Questionnaire(props) {
                 display="spinner"
                 maximumDate={new Date()}// Limit selection
                 onChange={setDate} 
-                // onChange={(e)=>{if(e.type == 'set'){this.setDate()}}} 
                 />}
                 </View>      );
         }

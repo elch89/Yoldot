@@ -63,11 +63,12 @@ const MyModal = (props)=>{
              onBackdropPress={props.hideModal}
              onBackButtonPress={props.hideModal}>
                  {visible && <StoryModal selected={props.selected} modalVisible={visible} toggle={()=>toggleStories()}/>}
-                <TouchableOpacity activeOpacity={0} style={styles.modalStyle} onPress={props.hideModal}>
-                    <View style={{backgroundColor:myColor.darkBlue}}>
-                        <Text style={[styles.title,]}>
+                <View  style={styles.modalStyle} >
+                    <View style={{backgroundColor:myColor.darkBlue,flexDirection:'row',justifyContent:'center'}}>
+                        <Text style={[styles.title,{flex:6}]}>
                             {props.selected.title} 
                         </Text>
+                        <Text style={{paddingVertical:5,fontWeight:'bold', color:'#fff', flex:1, textAlign:'center',textAlignVertical:'center'}}>X</Text>
                     </View>
                     <FlatList 
                         showsVerticalScrollIndicator={false}
@@ -107,19 +108,12 @@ const MyModal = (props)=>{
                     
                     <TouchableOpacity onPress={()=>toggleStories()}>
                         <View style={{backgroundColor:myColor.darkBlue}}>
-                            <Text style={{
-                                    fontSize:24, 
-                                    color:'#fff',
-                                    textAlign:'center',
-                                    fontWeight:'bold',
-                                    paddingBottom:10,
-                                    paddingTop:6,
-                                }}>
+                            <Text style={styles.title}>
                                 {'לחצי כאן עבור סיפורי לידה'}
                             </Text>
                         </View>
                     </TouchableOpacity>
-                </TouchableOpacity>
+                </View>
 
             </Modal>
         </View>
@@ -192,11 +186,6 @@ function Rating(props){
                         style={{flex:1}}>
             { isModalVisible && <MyModal selected={selectedItem} modalVisible={isModalVisible} hideModal={_hideMyModal} /> }
             {/* Header */}
-            <View style={{backgroundColor:myColor.darkBlue,}}>
-                <Text style={[styles.title,]}>
-                    בתי יולדות - ציון משוקלל
-                </Text>
-            </View>
             <FlatList
                 style = {{paddingHorizontal:3, backgroundColor:'transparent'}}
                 showsVerticalScrollIndicator={false}
@@ -237,8 +226,7 @@ const styles = StyleSheet.create({
         color:'#fff',
         textAlign:'center',
         fontWeight:'bold',
-        paddingBottom:10,
-        paddingTop:6,
+        paddingVertical:5
     },
 
 });

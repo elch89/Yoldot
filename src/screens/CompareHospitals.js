@@ -14,9 +14,6 @@ import Details from './CompareHospitalsDetails'
 import SearchBox  from '../components/SearchHeader'
 import myColor from '../styles/colors'
 import {connection} from '../data/DataSource'
-import Icon from 'react-native-vector-icons/AntDesign'
-
-const leftArrow = (<Icon name='doubleleft' size={30} color={myColor.gold} />);
 
 function Compare(props){
   const [val, setVal] = useState(0);
@@ -244,18 +241,25 @@ const Category =(props)=>{
   }
   return (
     <View style={{flex:1, flexDirection:"row",}} >
-    <View style={{flex:0.9}}><FlatList
+    <View style={{flex:1, flexDirection: 'column', }}><FlatList
       style={[styles.categoryStyles, props.style,]}
       contentContainerStyle={styles.flatListStyles}
       horizontal
-      showsHorizontalScrollIndicator={false}
-      showsVerticalScrollIndicator={false}
+      persistentScrollbar={true}
       keyExtractor={(item, index) => index}
-
+      onEndReachedThreshold={1}
       renderItem={renderItemCategory}
       data={data}
-    /></View>
-    <View style={{flex:0.1,justifyContent:'center',}}>{leftArrow}</View>
+    />
+    <View
+    style={{
+      width: '100%',
+      height: 2,
+      backgroundColor: myColor.darkBlue,
+      borderRadius: 8
+    }}
+  />
+    </View>
     </View>
   );
 };

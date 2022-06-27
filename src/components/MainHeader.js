@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import {
     Alert,
-    ImageBackground
+    ImageBackground,
+    TouchableOpacity, View , Text
 } from 'react-native';
 import { Icon,IconButton ,HStack, Heading , Box, Center, AlertDialog, Button } from 'native-base';
 import { CommonActions ,StackActions} from '@react-navigation/native';
 import { Entypo } from '@expo/vector-icons';
 import myColors from '../styles/colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+// import { LoginManager } from 'react-native-fbsdk-next';
 
 const LogOutBtn =(props)=>{
     const [isOpen, setIsOpen] = React.useState(false);
@@ -15,6 +17,7 @@ const LogOutBtn =(props)=>{
     const onClose = () => setIsOpen(false);
     const logOut = () =>{
         props.logState();
+        // LoginManager.logOut()
         const resetAction = CommonActions.reset({
             index: 0,
             routes: [{ name: 'Login' }],
@@ -23,29 +26,12 @@ const LogOutBtn =(props)=>{
     }
     const cancelRef = React.useRef(null);
     return (<>
-    <IconButton icon={<Icon size="xl" as={Entypo} name="log-out" style={{color:myColors.red,}} />}
-        onPress={() => {setIsOpen(!isOpen)
-            // Alert.alert(
-            //     'התנתקות',
-            //     'האם את בטוחה שאת רוצה להתנתק?',
-            //     [
-            //       { text: "ביטול", style: 'cancel', onPress: () => {} },
-            //       {
-            //         text: 'אישור',
-            //         style: 'destructive',
-            //         onPress: () =>{
-            //             props.logState();
-            //             const resetAction = CommonActions.reset({
-            //                 index: 0,
-            //                 routes: [{ name: 'Login' }],
-            //             });
-            //             props.navigation.dispatch(resetAction)
-            //         },
-            //       },
-            //     ]
-            //   );
-        }}>
-    </IconButton>
+    {/* <IconButton icon={<Icon size="xl" as={Entypo} name="log-out" style={{color:myColors.red,}} />}
+        onPress={() => {setIsOpen(!isOpen)}}>
+    </IconButton> */}
+    <TouchableOpacity onPress={()=>setIsOpen(!isOpen)}><View style={{justifyContent:'center',alignContent:'center', flex:1}} >
+                        <Text style={{color:myColors.red}}>{'התנתקות'}</Text>
+                    </View></TouchableOpacity>
     <AlertDialog leastDestructiveRef={cancelRef} isOpen={isOpen} onClose={onClose}>
     <AlertDialog.Content>
       {/* <AlertDialog.CloseButton /> */}
@@ -89,11 +75,10 @@ const MainHeader = (props) =>{
         imageStyle={{
             opacity:0.4,}}
         style={{
-            // flex: 1,
-            height:60
+            height:80
           }}>
         <Center bg="transparent" px="1" pt="1" flex={1}>
-              <HStack  bg="transparent" direction={"row"} >
+              <HStack  bg="transparent" direction={"row"} px='4'>
                 <Box flex={1} alignItems="flex-start" justifyContent="center"  >
                     <Heading color={myColors.red} size="md">שלום, {name}</Heading>
                 </Box>

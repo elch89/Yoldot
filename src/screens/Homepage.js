@@ -199,6 +199,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize:24,
         fontWeight:'bold',
+        fontFamily:'varelaRound',
         color:myColor.darkBlue,
     },
     touchables:{

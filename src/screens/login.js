@@ -15,8 +15,9 @@ import { Alert as NbAlert, HStack, useToast, Box } from 'native-base';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CommonActions } from '@react-navigation/native';
 import {LinearGradient} from 'expo-linear-gradient';
-import myColor from '../styles/colors'
-import {connection} from '../data/DataSource'
+import myColor from '../styles/colors';
+import {connection} from '../data/DataSource';
+// import { LoginButton, AccessToken, Profile,LoginManager  } from 'react-native-fbsdk-next'
 
 function Login(props){
   const [email, setEmail] = useState(null);
@@ -36,6 +37,47 @@ function Login(props){
       keyboardDidHideListener.remove();
     }
   },[]);
+  // async function currentProfile(){ Profile.getCurrentProfile().then(
+  //   function(currentProfile) {
+  //     console.log(currentProfile)
+  //     if (currentProfile) {
+  //       console.log("The current logged user is: " +
+  //         currentProfile.name
+  //         + ". His profile id is: " +
+  //         currentProfile.userID
+  //       );
+  //     }
+  //   }
+  // );}
+  // function fbLog(){ LoginManager.logInWithPermissions(["public_profile","email"]).then(
+  //   function(result) {
+  //     if (result.isCancelled) {
+  //       console.log("Login cancelled");
+  //     } else {
+  //       console.log(
+  //         "Login success with permissions: " +
+  //           result.grantedPermissions.toString()
+  //       );
+        
+  //       AccessToken.getCurrentAccessToken().then(
+  //         (data) => {
+  //           const resetAction = CommonActions.reset({
+  //             index: 0,
+  //             routes: [{ name: 'Home' }],
+  //           });
+            
+  //           saveItem('id_token', data.accessToken.toString()),
+  //           saveItem('email', 'sddd')
+  //           saveItem('user_name', 'currentProfile')
+  //           // props.navigation.dispatch(resetAction)
+  //           console.log(data.accessToken.toString())
+  //         });
+  //     }
+  //   },
+  //   function(error) {
+  //     console.log("Login fail with error: " + error);
+  //   }
+  // ).finally((_)=>currentProfile().then().catch((e)=>console.log(e)));}
   async function saveItem(item, selectedValue) {
     try {
       await AsyncStorage.setItem(item, selectedValue);
@@ -64,8 +106,6 @@ function Login(props){
     // empty fields and verify
     if (!email || !password ){
       toastMessege('יש למלא את כל השדות')
-          
-      // Alert.alert('שגיאה','יש למלא את כל השדות');
       return;
     }
     if( !validateInput(email)){
@@ -121,6 +161,7 @@ function Login(props){
     .finally(()=>Alert.alert('איפוס סיסמה','שלחנו לך אימייל לאיפוס סיסמה '))
     .done();
   }
+  
   return (
         <SafeAreaView style={{flex:1}}>  
             
@@ -200,6 +241,43 @@ function Login(props){
                           <Text style={{alignSelf:'center',fontSize:16,fontWeight:'bold', color: myColor.black, paddingBottom:28}}>שכחתי את הסיסמא
                             </Text>
                         </TouchableOpacity>
+                        {/* <TouchableOpacity 
+                          style = {styles.btnContainer}
+                          onPress={ ()=>{fbLog()} }>
+                          <View 
+                            style={{justifyContent:'center'}}>
+                            <Text style={styles.btnActions}>
+                                {'Facebook'}
+                            </Text>
+                          </View>
+                        </TouchableOpacity> */}
+                        {/* <LoginButton
+                          
+                            onLoginFinished={
+                            (error, result) => {
+                            if (error) {
+                              console.log("login has error: " + result.error);
+                            } else if (result.isCancelled) {
+                              console.log("login is cancelled.");
+                            } else { 
+                            AccessToken.getCurrentAccessToken().then(
+                            (data) => {
+                              const resetAction = CommonActions.reset({
+                                index: 0,
+                                routes: [{ name: 'Home' }],
+                              });
+                              console.log(LoginManager.getLoginBehavior().then())
+                              saveItem('id_token', data.accessToken.toString()),
+                              saveItem('email', 'sddd')
+                              saveItem('user_name', 'currentProfile')
+                              // props.navigation.dispatch(resetAction)
+                              console.log(data.accessToken.toString())
+                            }
+                                  )
+                                }
+                              }
+                            }
+                            onLogoutFinished={() => console.log("logout.")}/> */}
                     </View>
                     </View>
                     </SafeAreaView>
