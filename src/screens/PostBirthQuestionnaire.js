@@ -107,6 +107,7 @@ function Questionnaire(props) {
             
             return;
         }
+        datepicker();
         setCurrDate(date)
         onItemsSelected([{aid:0,val:date}])
     }
@@ -294,16 +295,12 @@ function Questionnaire(props) {
                 if(qid >=4){
                     tmpIt = qid-2;
                 }
-                // console.log(submitted[tmpIt])//
-                // console.log(entry.selectedItem) //entry.selectedItem.length>0 ||
                 if( submitted[tmpIt].answer.length>0 || qid === 48)//48
                     props.onPressNext();
             }}>
-            {/* <View style={{justifyContent:'center'}}> */}
                 <Text style={[styles.btnStyle,]}>
                     {(qid==48)?'לסיום':'הבא'} 
                 </Text>
-            {/* </View> */}
         </TouchableOpacity>
     );
     let touchableBack =(
@@ -311,11 +308,9 @@ function Questionnaire(props) {
                 key={1}
                 style = {[styles.btnContainer]}
                 onPress={()=>{props.onPressBack();}}>
-                {/* <View style={{justifyContent:'center'}}> */}
                     <Text style={styles.btnStyle}>
                         {'הקודם'}
                     </Text>
-                {/* </View> */}
             </TouchableOpacity>);
     let touchable;
     if(qid===1){

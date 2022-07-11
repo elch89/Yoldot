@@ -131,7 +131,7 @@ export default function HomePage(props){
                             }
                         }}>
                     <View style={{justifyContent:'center',alignContent:'center', flex:1}} >
-                        <Text style={txtStyle}>{placeholder}</Text>
+                        <Text adjustsFontSizeToFit style={txtStyle}>{placeholder}</Text>
                     </View>
                 </TouchableOpacity>
             </LinearGradient>
@@ -158,11 +158,11 @@ export default function HomePage(props){
                 </HStack>
                 <HStack flex={1} >
                     <Box flex={1}>
-                        <Badge _text={{fontSize: 18, fontWeight:'bold'}} colorScheme="danger" zIndex={1} variant={"outline"} style={{elevation:5,position: 'absolute',top:10,start:10}}>בקרוב</Badge>
+                        <Badge _text={{fontSize: 18, fontWeight:'bold'}} colorScheme="danger" zIndex={1} variant={"outline"} style={{elevation:5,position: 'absolute',top:20,start:20}}>בקרוב</Badge>
                         <Touchable nav={{route:'Podcasts',params:null}} txtStyle={styles.buttonText} placeholder={'לפודקאסט'}/>
                     </Box>
                     <Box flex={1}>
-                        <Badge _text={{fontSize: 18, fontWeight:'bold'}} colorScheme="danger"  zIndex={1} variant={"outline"} style={{elevation:5,position: 'absolute',top:10,start:10}} >בקרוב</Badge>
+                        <Badge _text={{fontSize: 18, fontWeight:'bold'}} colorScheme="danger"  zIndex={1} variant={"outline"} style={{elevation:5,position: 'absolute',top:20,start:20}} >בקרוב</Badge>
                         <Touchable nav={{route:'Coupons',params:null}} txtStyle={styles.buttonText} placeholder={'לקבלת קופונים'}/>
                     </Box>
                 

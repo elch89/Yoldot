@@ -68,7 +68,7 @@ const MainHeader = (props) =>{
         setHeaderTitle();
     },[]);
     return(
-    <SafeAreaView style={{minHeight:120}}>
+    <SafeAreaView style={{minHeight:100}}>
         <ImageBackground
         source={require('../../assets/img/yoldot_logo.png')}
         resizeMode="contain"
