@@ -66,7 +66,7 @@ function Questionnaire(props) {
             setSelected(answers[idx].answer[0].val);
         }
         else if(answers[idx].qtype=== 'date'){
-            setDate(answers[idx].answer[0].val);
+            setCurrDate(answers[idx].answer[0].val);
         }
         else if(answers[idx].qtype === 'open_short'||
                 answers[idx].qtype === 'open_numeric'||
@@ -107,9 +107,6 @@ function Questionnaire(props) {
             
             return;
         }
-        console.log(date)
-        date = date || currDate;
-        setShowDate(Platform.OS === 'ios' ? true : false);
         setCurrDate(date)
         onItemsSelected([{aid:0,val:date}])
     }
@@ -302,23 +299,23 @@ function Questionnaire(props) {
                 if( submitted[tmpIt].answer.length>0 || qid === 48)//48
                     props.onPressNext();
             }}>
-            <View style={{justifyContent:'center'}}>
+            {/* <View style={{justifyContent:'center'}}> */}
                 <Text style={[styles.btnStyle,]}>
                     {(qid==48)?'לסיום':'הבא'} 
                 </Text>
-            </View>
+            {/* </View> */}
         </TouchableOpacity>
     );
     let touchableBack =(
         <TouchableOpacity 
                 key={1}
-                style = {styles.btnContainer}
+                style = {[styles.btnContainer]}
                 onPress={()=>{props.onPressBack();}}>
-                <View style={{justifyContent:'center'}}>
+                {/* <View style={{justifyContent:'center'}}> */}
                     <Text style={styles.btnStyle}>
                         {'הקודם'}
                     </Text>
-                </View>
+                {/* </View> */}
             </TouchableOpacity>);
     let touchable;
     if(qid===1){
@@ -330,8 +327,8 @@ function Questionnaire(props) {
         
     // Final render, 
     return(<View style={styles.cardView} >
-        <View style={{flex:6}}>
-            <View style={[styles.section]}>
+        <View style={{flex:5}}>
+            <View style={[styles.section,{justifyContent:'center', alignItems:'center'}]}>
                 <Text style={styles.titles}>{props.question}</Text>
             </View>{/* title */}
             <View style={[{
@@ -342,6 +339,7 @@ function Questionnaire(props) {
     <View 
             style={{flexDirection:'row-reverse',
             flex:1, 
+            // bottom:20,
             paddingHorizontal:20}}>
             {touchable}
         </View> 
@@ -413,7 +411,9 @@ const styles = StyleSheet.create({
     btnContainer:{
         backgroundColor: myColor.red,
         justifyContent:'center',
+        alignItems:'center',
         marginVertical:10,
+        marginBottom:40,
         borderWidth:2,
         borderColor:myColor.darkBlue,
         flex:1,
@@ -431,7 +431,8 @@ const styles = StyleSheet.create({
         fontWeight:'bold',
         fontSize:28,
         color:myColor.darkBlue,
-        paddingTop:30,
+        paddingTop:20,
+        paddingBottom:10,
         paddingHorizontal:28
     },
     txtInp:{
@@ -444,7 +445,7 @@ const styles = StyleSheet.create({
         padding:6
     },
     btnStyle:{
-        textAlign:'center',
+        // textAlign:'center',
         padding: 12, 
         fontSize:18,
         color: 'white', 

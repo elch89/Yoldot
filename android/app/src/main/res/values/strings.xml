@@ -2,6 +2,4 @@
   <string name="app_name">Yoldot</string>
   <string name="expo_splash_screen_resize_mode" translatable="false">contain</string>
   <string name="expo_splash_screen_status_bar_translucent" translatable="false">false</string>
-  <string name="fb_login_protocol_scheme">fb691279821938908</string>
-  <string name="facebook_client_token">397d27a1d264bc84ff191978c71f2ad6</string>
 </resources>

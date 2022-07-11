@@ -1,9 +1,6 @@
-import React,{useEffect, useState} from 'react';
-// import * as SplashScreen from "expo-splash-screen";
-import { Platform, SafeAreaView} from 'react-native';
-import {NavigationContainer , CommonActions, StackActions } from '@react-navigation/native';
+import React from 'react';
+import {NavigationContainer , CommonActions } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { HeaderBackButton } from '@react-navigation/elements';
 import {Rating,
     Register,
     Login,
@@ -12,26 +9,14 @@ import {Rating,
     Coupons,
     Podcasts,
     Feedback,} from './src/screens/index';
-import * as NavigationBar from 'expo-navigation-bar';
-import { StatusBar } from 'expo-status-bar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppLoading from 'expo-app-loading';
-// import useFonts hook  
 import { useFonts } from "@use-expo/font";
 import { NativeBaseProvider } from 'native-base';
 import MainHeader from './src/components/MainHeader';
 import colors from './src/styles/colors';
 
-// SplashScreen.preventAutoHideAsync().then(configureBgNav).catch((error) => {    
-//    console.warn("SplashScreen.preventAutoHideAsync error:", error);
-//   });
-// async function configureBgNav(){// configure nav bar color
-//   try{
-//     NavigationBar.setVisibilityAsync('hidden');
-//     await NavigationBar.setButtonStyleAsync('dark');
-//   }
-//   catch(e){console.log(e)}
-// }
+
 async function userLogout(){
   try {
       // Remove user token from storage
@@ -54,7 +39,7 @@ function MainNavigator(){
          name='Home'
          component={HomePage}
          options={{
-          header:(props)=><SafeAreaView style={{height:80}}><MainHeader logState={userLogout} {...props}/></SafeAreaView>
+          header:(props)=><MainHeader logState={userLogout} {...props}/>
           }}/>
         <Stack.Screen
          name='Login'
@@ -67,11 +52,23 @@ function MainNavigator(){
         <Stack.Screen
          name='Feedback'
          component={Feedback}
-         options={{header:(props)=>null}}/>
+        options={{
+          headerStyle:{backgroundColor:colors.darkBlue},
+          headerTitle:(props)=>null,
+          headerTintColor: '#fff',
+          headerBackTitle:'חזרה',
+      }}
+         />
          <Stack.Screen
          name='Compare'
          component={Compare}
-         options={{header:(props)=>null}}/>
+        options={{
+          headerStyle:{backgroundColor:colors.darkBlue},
+          headerTitle:(props)=>null,
+          headerTintColor: '#fff',
+          headerBackTitle:'חזרה',
+      }}
+         />
          <Stack.Screen
          name='Rating'
          component={Rating}
@@ -85,15 +82,12 @@ function MainNavigator(){
             fontWeight:'bold',
           },
           headerTintColor: '#fff',
+          headerBackTitle:'חזרה',
           }}/>
          <Stack.Screen
          name='initScreen'
          component={InitScreen}
          options={{header:(props)=>null}}/>
-         {/* <Stack.Screen 
-         name='Testing'
-         component={CustomList}
-         options={{header:(props)=>null}}/> */}
 
     </Stack.Navigator>
   )};
@@ -119,13 +113,13 @@ function InitScreen (props){
 }
 
 const App = () =>{
-
+  
   // the same as Font.loadAsync , the hook returns  true | error 
   const [isLoaded] = useFonts(customFont);
   if (!isLoaded) {
       return <AppLoading />;
   }
-  return <NativeBaseProvider><NavigationContainer><StatusBar hidden={(Platform.OS==='ios')?false:true}/><MainNavigator/></NavigationContainer></NativeBaseProvider>;
+  return <NativeBaseProvider><NavigationContainer><MainNavigator/></NavigationContainer></NativeBaseProvider>;
       
 };
 export default App

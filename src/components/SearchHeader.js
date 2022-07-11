@@ -20,7 +20,7 @@ const SearchBox = (props) =>{
 
   const renderSelected=()=>{
     let selectedArray = Array()
-    const color =[myColor.lightBlue, myColor.red]
+    const color =[myColor.lightBlue, "#E48598"]
     selectedItems.map((n,i)=>{
       selectedArray.push(<TouchableOpacity 
                             key={i} 

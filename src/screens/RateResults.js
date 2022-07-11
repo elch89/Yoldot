@@ -7,11 +7,15 @@ import {
     TouchableOpacity,
     I18nManager,
     StyleSheet,
+    Dimensions
 } from 'react-native';
 import {LinearGradient} from 'expo-linear-gradient';
 import myColor from '../styles/colors'
 import Modal from 'react-native-modal'
-import StarRating from 'react-native-star-rating'
+import StarRating from 'react-native-star-rating';
+import { StatusBar } from 'expo-status-bar';
+
+const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 const StoryModal = (props)=>{
     let story = []
@@ -25,7 +29,7 @@ const StoryModal = (props)=>{
                 backdropOpacity={0.3}
                 onBackdropPress={props.toggle}
                 onBackButtonPress={props.toggle}>
-                 <View style={styles.modalStyle} > 
+                 <View style={[styles.modalStyle,{height:SCREEN_HEIGHT-70}]} > 
                     <FlatList 
                         horizontal={false}
                         data={story}
@@ -64,11 +68,14 @@ const MyModal = (props)=>{
              onBackButtonPress={props.hideModal}>
                  {visible && <StoryModal selected={props.selected} modalVisible={visible} toggle={()=>toggleStories()}/>}
                 <View  style={styles.modalStyle} >
-                    <View style={{backgroundColor:myColor.darkBlue,flexDirection:'row',justifyContent:'center'}}>
+                    <View style={{backgroundColor:myColor.darkBlue,flexDirection:'row',}}>
                         <Text style={[styles.title,{flex:6}]}>
                             {props.selected.title} 
                         </Text>
-                        <Text style={{paddingVertical:5,fontWeight:'bold', color:'#fff', flex:1, textAlign:'center',textAlignVertical:'center'}}>X</Text>
+                        <TouchableOpacity onPressOut={props.hideModal} style={{flex:1, alignContent:'center',justifyContent:'center',paddingVertical:5}}>
+                        <Text style={{fontWeight:'bold', color:'#fff', textAlign:'center',textAlignVertical:'center'}}>X</Text>
+                        </TouchableOpacity>
+                        
                     </View>
                     <FlatList 
                         showsVerticalScrollIndicator={false}
@@ -195,6 +202,7 @@ function Rating(props){
                 keyExtractor={item => item.id.toString()}
             />
             </LinearGradient>
+            <StatusBar style="light" hidden={(Platform.OS==='ios')?false:true}/>
         </SafeAreaView>
     )
 }

@@ -5,18 +5,20 @@ import {
   View,
   Text,
   TouchableOpacity,
-  Linking
+  Linking,
+  Platform
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Footer from '../components/Footer'
-import { HStack, VStack, Divider, Badge, Box } from 'native-base';
+import { HStack, VStack, Badge, Box } from 'native-base';
 import myColor from '../styles/colors'
 import * as FileSystem  from 'expo-file-system';
 import * as SQLite from 'expo-sqlite'
 import {Asset} from 'expo-asset';
 import {connection} from '../data/DataSource';
 import * as SplashScreen from 'expo-splash-screen';
+import { StatusBar } from 'expo-status-bar';
 
 const hospIos =[
     {"id": 1, "name": "איכילוב- תל אביב",},
@@ -59,19 +61,20 @@ export default function HomePage(props){
         try{
             await SplashScreen.preventAutoHideAsync();
             // query local db
-            // await openDatabase().then((db)=>{
-            //     db.transaction(tx => {
-            //         tx.executeSql('SELECT * FROM hospitals', [], (tx, results) => {
-            //             var hospitalist = [];
-            //             for (let i = 0; i < results.rows.length; ++i) {
-            //             // inserts all rows to list
-            //             hospitalist.push(results.rows.item(i));
-            //             }
-            //             setHospitals(hospitalist)
-            //             console.log(hospIos);
-            //         });
-            //     });
-            // });
+            
+            await openDatabase().then((db)=>{
+                db.transaction(tx => {
+                    tx.executeSql('SELECT * FROM hospitals', [], (tx, results) => {
+                        var hospitalist = [];
+                        for (let i = 0; i < results.rows.length; ++i) {
+                        // inserts all rows to list
+                        hospitalist.push(results.rows.item(i));
+                        }
+                        setHospitals(hospitalist)
+                        // console.log(hospIos);
+                    });
+                });
+            });
             setHospitals(hospIos)
             await fetchData();
 
@@ -167,6 +170,7 @@ export default function HomePage(props){
             </VStack>
         </View>
         <Footer/>
+        <StatusBar style="dark" hidden={(Platform.OS==='ios')?false:true}/>
     </SafeAreaView>);
 }
 
@@ -182,7 +186,6 @@ async function openDatabase() {
         ).catch(error => {
             console.error(error);
         });
-    console.log(FileSystem.documentDirectory)
     return SQLite.openDatabase('qoest_db.db');
 }
 
@@ -193,7 +196,6 @@ const styles = StyleSheet.create({
         paddingHorizontal:0,
         margin:1,
         flex:1,
-        // elevation:19,
     },
     buttonText: {
         textAlign: 'center',
@@ -204,11 +206,11 @@ const styles = StyleSheet.create({
     },
     touchables:{
         flex:1,
-        margin:1,
+        margin:20,
         padding:10,
         borderColor:myColor.darkBlue,
         borderWidth:1,
-        borderRadius:7,
+        borderRadius:3,
         elevation:5,
     },
 })

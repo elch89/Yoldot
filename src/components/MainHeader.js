@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {
     Alert,
     ImageBackground,
-    TouchableOpacity, View , Text
+    TouchableOpacity, View , Text, SafeAreaView
 } from 'react-native';
 import { Icon,IconButton ,HStack, Heading , Box, Center, AlertDialog, Button } from 'native-base';
 import { CommonActions ,StackActions} from '@react-navigation/native';
@@ -68,14 +68,15 @@ const MainHeader = (props) =>{
         setHeaderTitle();
     },[]);
     return(
-    <>
+    <SafeAreaView style={{minHeight:120}}>
         <ImageBackground
         source={require('../../assets/img/yoldot_logo.png')}
         resizeMode="contain"
         imageStyle={{
-            opacity:0.4,}}
+            opacity:0.7,}}
         style={{
-            height:80
+            // minHeight:'100%'
+            flex:1
           }}>
         <Center bg="transparent" px="1" pt="1" flex={1}>
               <HStack  bg="transparent" direction={"row"} px='4'>
@@ -88,6 +89,6 @@ const MainHeader = (props) =>{
             </HStack>
         </Center>
         </ImageBackground>
-    </>
+    </SafeAreaView>
 )};
 export default MainHeader;

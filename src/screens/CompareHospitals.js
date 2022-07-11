@@ -14,6 +14,7 @@ import Details from './CompareHospitalsDetails'
 import SearchBox  from '../components/SearchHeader'
 import myColor from '../styles/colors'
 import {connection} from '../data/DataSource'
+import { StatusBar } from 'expo-status-bar';
 
 function Compare(props){
   const [val, setVal] = useState(0);
@@ -185,7 +186,8 @@ function Compare(props){
             {renderHospitalInfo()}
             </VStack>
           </VStack> 
-          </LinearGradient>   
+          </LinearGradient> 
+          <StatusBar style="light" hidden={(Platform.OS==='ios')?false:true}/>  
       </SafeAreaView>);
 }
 export default Compare;
@@ -201,6 +203,7 @@ const Category =(props)=>{
     arrCategory.push(newObject);});
   const [data,setData] = useState(arrCategory);
   const [indexSelected,setIndexSelected] = useState(0);
+  const [nativeEvent,setNativeEvent]=useState()
   useEffect(()=>{
     
     let onPress = props.itemSelected;
@@ -239,26 +242,44 @@ const Category =(props)=>{
     let onPress = props.itemSelected;
     typeof onPress === 'function' && onPress(item);
   }
+  const start = nativeEvent?nativeEvent.contentOffset.x*
+  (nativeEvent.layoutMeasurement.width/nativeEvent.contentSize.width)
+  :0;
   return (
     <View style={{flex:1, flexDirection:"row",}} >
     <View style={{flex:1, flexDirection: 'column', }}><FlatList
       style={[styles.categoryStyles, props.style,]}
       contentContainerStyle={styles.flatListStyles}
       horizontal
-      persistentScrollbar={true}
+      // persistentScrollbar={true}
+      scrollEventThrottle={5}
+      showsHorizontalScrollIndicator={false}
+      onScroll={event => setNativeEvent(event.nativeEvent)}
       keyExtractor={(item, index) => index}
       onEndReachedThreshold={1}
       renderItem={renderItemCategory}
       data={data}
     />
     <View
+      style={{
+        width:'100%',
+        height:4,
+        backgroundColor:myColor.lightBlue,
+        borderRadius:20,
+        overflow:'hidden'
+      }}>
+    <View
     style={{
-      width: '100%',
-      height: 2,
+      start,
+      bottom:0,
+      width: '30%',
+      height: 4,
       backgroundColor: myColor.darkBlue,
-      borderRadius: 8
+      borderRadius: 20
     }}
   />
+    </View>
+    
     </View>
     </View>
   );

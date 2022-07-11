@@ -6,7 +6,9 @@ import {
     SafeAreaView, 
     Animated, 
     Alert,
+    ScrollView,
 } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
 import {AlertDialog,Button} from 'native-base'
 import myColor from '../styles/colors'
 import Questionnaire  from './PostBirthQuestionnaire';//Survey
@@ -54,13 +56,18 @@ function Feedback(props){
             questions.push(results.rows.item(i));
         }
         setSurveyQuestions(questions);
-        console.log(questionsIos);
     }
     const loadAsyncData = async () =>{ 
             // Categories: Ifyun 0-10, Mashov 11-27 , Seker 28-44, SviutRatzon 45-47
             setSurveyQuestions(questionsIos);
-        // db.transaction(tx => {
-        // tx.executeSql('SELECT * FROM questions_table', [], (tx, results) => res(results))});
+         try{
+          db.transaction(tx => {
+            tx.executeSql('SELECT * FROM questions_table', [], (tx, results) => 
+            res(results)
+              )});
+         }
+         catch{(e)=>console.log(e)}
+        
         
         // fetch user email from stored data - for identification of submitter
         AsyncStorage.getItem('email').then((mail)=>{
@@ -350,12 +357,14 @@ function Feedback(props){
         <SafeAreaView style={{flex:1}}>
         <LinearGradient colors={[ myColor.gold,'#fff', myColor.lightBlue, myColor.darkBlue]}
                         locations={[0,0.1,0.7,1]}
-                        style={styles.linearGradient}>
+                        style={{flex:1}}>
         <View style={{ flex: 1 }}>
         {render()}
         </View>
+        
     </LinearGradient>
-    <Footer/>
+    <StatusBar style="light" hidden={(Platform.OS==='ios')?false:true}/>
+    {/* <Footer/> */}
     </SafeAreaView>
 )
 }
@@ -412,33 +421,12 @@ const submitToServer = (data,props, userId) =>{
       return successToken;
 }
 const styles = StyleSheet.create({
-    linearGradient: {
-        flex:1
-    },
-    progress:{
-        flex:1,
-        flexDirection:'row-reverse',
-        alignSelf:'center',
-        
-        padding:15,
-    },
-    circle:{
-        height:15, 
-        width:15,
-        borderRadius:15/2,
-        borderColor:'#000',
-        borderWidth:1,
-        marginHorizontal:5
-    },
-    modalTxt:{
-        textAlign:'center',
-        padding:35,
-    },
     card:{
-        height: SCREEN_HEIGHT-60,
+        height: SCREEN_HEIGHT-(90/(720/SCREEN_WIDTH)),
         width: SCREEN_WIDTH,
         paddingTop: 5,
-        position:'absolute',
+        // bottom:80
+        // position:'absolute',
     },
     
     
