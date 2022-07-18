@@ -17,7 +17,6 @@ import { CommonActions } from '@react-navigation/native';
 import {LinearGradient} from 'expo-linear-gradient';
 import myColor from '../styles/colors';
 import {connection} from '../data/DataSource';
-// import { LoginButton, AccessToken, Profile,LoginManager  } from 'react-native-fbsdk-next'
 
 function Login(props){
   const [email, setEmail] = useState(null);
@@ -25,7 +24,6 @@ function Login(props){
   const [eBoxWidth, setEBoxWidth] = useState(1); //emailBoxWidth
   const [eErrorVisible, setEErrorVisible] = useState(false);
   const [imageOpacity,setImageOpacity] = useState(1);
-  const [btnPressed, setBtnPressed] = useState(false);
   const ref_email = useRef(null);
   const toast = useToast();
   
@@ -37,47 +35,6 @@ function Login(props){
       keyboardDidHideListener.remove();
     }
   },[]);
-  // async function currentProfile(){ Profile.getCurrentProfile().then(
-  //   function(currentProfile) {
-  //     console.log(currentProfile)
-  //     if (currentProfile) {
-  //       console.log("The current logged user is: " +
-  //         currentProfile.name
-  //         + ". His profile id is: " +
-  //         currentProfile.userID
-  //       );
-  //     }
-  //   }
-  // );}
-  // function fbLog(){ LoginManager.logInWithPermissions(["public_profile","email"]).then(
-  //   function(result) {
-  //     if (result.isCancelled) {
-  //       console.log("Login cancelled");
-  //     } else {
-  //       console.log(
-  //         "Login success with permissions: " +
-  //           result.grantedPermissions.toString()
-  //       );
-        
-  //       AccessToken.getCurrentAccessToken().then(
-  //         (data) => {
-  //           const resetAction = CommonActions.reset({
-  //             index: 0,
-  //             routes: [{ name: 'Home' }],
-  //           });
-            
-  //           saveItem('id_token', data.accessToken.toString()),
-  //           saveItem('email', 'sddd')
-  //           saveItem('user_name', 'currentProfile')
-  //           // props.navigation.dispatch(resetAction)
-  //           console.log(data.accessToken.toString())
-  //         });
-  //     }
-  //   },
-  //   function(error) {
-  //     console.log("Login fail with error: " + error);
-  //   }
-  // ).finally((_)=>currentProfile().then().catch((e)=>console.log(e)));}
   async function saveItem(item, selectedValue) {
     try {
       await AsyncStorage.setItem(item, selectedValue);
@@ -139,13 +96,12 @@ function Login(props){
       saveItem('user_name', responseData.user.name)
       props.navigation.dispatch(resetAction)
     }
-    }).catch((error)=>toastMessege('יש לבדוק את חיבור האינטרנט '))//Alert.alert('שגיאה','יש לבדוק את חיבור האינטרנט'))
+    }).catch((error)=>toastMessege('יש לבדוק את חיבור האינטרנט '))
     .done();
   }
   const passwordReset = () =>{
     if (!email){ 
       toastMessege('יש להכניס אימייל ')
-      // Alert.alert('שגיאה','יש להכניס אימייל ');
       return;
     }
     // create post parameters
@@ -241,43 +197,6 @@ function Login(props){
                           <Text style={{alignSelf:'center',fontSize:16,fontWeight:'bold', color: myColor.black, paddingBottom:28}}>שכחתי את הסיסמא
                             </Text>
                         </TouchableOpacity>
-                        {/* <TouchableOpacity 
-                          style = {styles.btnContainer}
-                          onPress={ ()=>{fbLog()} }>
-                          <View 
-                            style={{justifyContent:'center'}}>
-                            <Text style={styles.btnActions}>
-                                {'Facebook'}
-                            </Text>
-                          </View>
-                        </TouchableOpacity> */}
-                        {/* <LoginButton
-                          
-                            onLoginFinished={
-                            (error, result) => {
-                            if (error) {
-                              console.log("login has error: " + result.error);
-                            } else if (result.isCancelled) {
-                              console.log("login is cancelled.");
-                            } else { 
-                            AccessToken.getCurrentAccessToken().then(
-                            (data) => {
-                              const resetAction = CommonActions.reset({
-                                index: 0,
-                                routes: [{ name: 'Home' }],
-                              });
-                              console.log(LoginManager.getLoginBehavior().then())
-                              saveItem('id_token', data.accessToken.toString()),
-                              saveItem('email', 'sddd')
-                              saveItem('user_name', 'currentProfile')
-                              // props.navigation.dispatch(resetAction)
-                              console.log(data.accessToken.toString())
-                            }
-                                  )
-                                }
-                              }
-                            }
-                            onLogoutFinished={() => console.log("logout.")}/> */}
                     </View>
                     </View>
                     </SafeAreaView>
@@ -293,7 +212,6 @@ const styles = StyleSheet.create({
     logo:{
       backgroundColor: 'transparent',
       alignSelf:'center',
-      // position:'absolute',
       marginTop:32,
       flex:1,
       resizeMode: 'contain',

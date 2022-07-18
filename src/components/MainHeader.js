@@ -26,16 +26,11 @@ const LogOutBtn =(props)=>{
     }
     const cancelRef = React.useRef(null);
     return (<>
-    {/* <IconButton icon={<Icon size="xl" as={Entypo} name="log-out" style={{color:myColors.red,}} />}
-        onPress={() => {setIsOpen(!isOpen)}}>
-    </IconButton> */}
     <TouchableOpacity onPress={()=>setIsOpen(!isOpen)}><View style={{justifyContent:'center',alignContent:'center', flex:1}} >
                         <Text style={{color:myColors.red}}>{'התנתקות'}</Text>
                     </View></TouchableOpacity>
     <AlertDialog leastDestructiveRef={cancelRef} isOpen={isOpen} onClose={onClose}>
     <AlertDialog.Content>
-      {/* <AlertDialog.CloseButton /> */}
-      {/* <AlertDialog.Header>התנתקות</AlertDialog.Header> */}
       <AlertDialog.Header borderColor={myColors.darkBlue}>{'האם את בטוחה שאת רוצה להתנתק?'}
       </AlertDialog.Header>
       <AlertDialog.Footer borderColor={"transparent"}>

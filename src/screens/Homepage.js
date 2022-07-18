@@ -9,7 +9,6 @@ import {
   Platform
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import Footer from '../components/Footer'
 import { HStack, VStack, Badge, Box } from 'native-base';
 import myColor from '../styles/colors'
@@ -20,34 +19,7 @@ import {connection} from '../data/DataSource';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 
-const hospIos =[
-    {"id": 1, "name": "איכילוב- תל אביב",},
-    {"id": 2,"name": "תל השומר שיבא- בקעת אונו",},
-    {"id": 3,"name": "לניאדו- נתניה",},
-    {"id": 4,"name": "מאיר- כפר סבא",},
-    {"id": 5,"name": "קפלן- רחובות",},
-    {"id": 6,"name": "מעייני הישועה- בני ברק",},
-    {"id": 7,"name": "אסף הרופא- ראשל\"צ",},
-    {"id": 8,"name": "וולפסון- יפו",},
-    {"id": 9,"name": "בלינסון- פתח תקווה",},
-    {"id": 10,"name": "עין כרם- ירושלים",},
-    {"id": 11,"name": "שערי צדק- ירושלים",},
-    {"id": 12,"name": "ביקור חולים- ירושלים",},
-    {"id": 13,"name": "הר הצופים- ירושלים",},
-    {"id": 14,"name": "סנט ג'וזף- ירושלים",},
-    {"id": 15,"name": "אסותא אשדוד",},
-    {"id": 16,"name": "ברזילי- אשקלון",},
-    {"id": 17,"name": "סורוקה- באר שבע",},
-    {"id": 18,"name": "יוספטל- אילת",},
-    {"id": 19,"name": "הלל יפה- חדרה",},
-    {"id": 20,"name": "העמק- עפולה",},
-    {"id": 21,"name": "פוריה- טבריה",},
-    {"id": 22,"name": "זיו- צפת",},
-    {"id": 23,"name": "המרכז הרפואי לגליל-נהריה",},
-    {"id": 24,"name": "רמב\"ם- חיפה",},
-    {"id": 25,"name": "בני ציון (רוטשילד)- חיפה",},
-    {"id": 26,"name": "כרמל- חיפה",},
-  ];
+
 // Get access to frontend database
 export default function HomePage(props){
     const [appIsReady, setAppIsReady] = useState(false);
@@ -71,11 +43,9 @@ export default function HomePage(props){
                         hospitalist.push(results.rows.item(i));
                         }
                         setHospitals(hospitalist)
-                        // console.log(hospIos);
                     });
                 });
             });
-            setHospitals(hospIos)
             await fetchData();
 
         }
